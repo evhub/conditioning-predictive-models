@@ -95,23 +95,14 @@ subsection_grammar = (
 patterns_list.append((subsection_grammar, subsection_replace))
 
 
-# unicode:
-U_MAP = (
+# special chars:
+patterns_list += [
     ("—", "---"),
     ("“", "``"),
     ("”", "''"),
     ("’", "'"),
-)
-
-unicode_grammar = Literal(U_MAP[0][0])
-for md, _ in U_MAP[1:]:
-    unicode_grammar |= Literal(md)
-
-@tokens_as_list(assert_len=1)
-def unicode_replace(tokens):
-    return dict(U_MAP)[tokens[0]]
-
-patterns_list.append((unicode_grammar, unicode_replace))
+    ("$", "$$"),
+]
 
 
 # ital:
@@ -282,6 +273,7 @@ def main(in_fname, out_fname):
 
     for i, (grammar, replace) in enumerate(patterns_list):
         if isinstance(grammar, str):
+            print(f"replacing {grammar!r} with {replace!r}...")
             text = text.replace(grammar, replace)
 
         else:
