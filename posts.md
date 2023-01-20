@@ -1254,7 +1254,7 @@ We think that there are a wide variety of ways—both experimental and theoretic
 * For models trained with metadata tags, how does conditioning on that metadata change the model’s behavior? Can we use the model’s predictions about the metadata to understand what it believes its predicting?
     * How does RLHF change the metadata tags that the model will predict?
     * If we condition on metadata tags from reliable sources, can we increase model accuracy?
-    * If we can identify model outputs in the pre-training corpus and give them metadata tags, can we us that to tell when a model is trying to predict another model?
+    * If we can identify model outputs in the pre-training corpus and give them metadata tags, can we use that to tell when a model is trying to predict another model?
 * Can we build datasets using only current data that are large enough to train future LLMs?
     * If so, such datasets could be very useful for future attempts to train models on data exclusively from a past when AIs were less common.
 * Do pre-trained LLMs currently attempt to predict the future, or just e.g. write fiction about the future when prompted with future dates?
