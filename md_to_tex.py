@@ -9,6 +9,7 @@ from undebt.pyparsing import (
     Literal,
     SkipTo,
     OneOrMore,
+    ZeroOrMore,
     Optional,
     originalTextFor,
     Word,
@@ -33,9 +34,11 @@ NUM = originalTextFor(Word("0123456789"))
 def SkipToAndThen(item):
     return SkipTo(item) + item
 
-REST_OF_LINE = originalTextFor(NL | (ANY_CHAR | WHITE) + SkipToAndThen(NL))
+def everything_up_to(item):
+    return originalTextFor(item | (ANY_CHAR | WHITE) + SkipToAndThen(item))
 
-UNTIL_NL_NL = originalTextFor(NL + NL | (ANY_CHAR | WHITE) + SkipToAndThen(NL + NL))
+REST_OF_LINE = everything_up_to(NL)
+UNTIL_NL_NL = everything_up_to(NL + NL)
 
 @tokens_as_list(assert_len=1)
 def trim(tokens):
@@ -64,16 +67,32 @@ def condense(item):
 patterns_list = []
 
 
-# header:
-header_grammar = (
+# section:
+section_grammar = (
     NL + Literal("#") + NUM("num") + Literal(".") + REST_OF_LINE("name")
 )
 
 @tokens_as_dict(assert_keys=("num", "name"))
-def header_replace(tokens):
+def section_replace(tokens):
     return "\n\\section{" + tokens["name"].rstrip() + "}\n\\label{sec:" + tokens["num"] + "}\n\\cftchapterprecistoc{TODO: toc section description}\n"
 
-patterns_list.append((header_grammar, header_replace))
+patterns_list.append((section_grammar, section_replace))
+
+
+# numbered subsection:
+@tokens_as_dict()
+def subsection_replace(tokens):
+    out = "\n\\subsection{" + tokens["name"].rstrip() + "}"
+    if "num" in tokens:
+        out += "\n\\label{sec:" + "".join(tokens["num"]) + "}"
+    out += "\n\\cftchapterprecistoc{TODO: toc section description}\n"
+    return out
+
+subsection_grammar = (
+    NL + Literal("##") + ~Literal("#") + Optional(ANY_CHAR + ANY_CHAR + Literal(".").suppress())("num") + REST_OF_LINE("name")
+)
+
+patterns_list.append((subsection_grammar, subsection_replace))
 
 
 # unicode:
@@ -103,6 +122,8 @@ ital_grammar = begin_ital + originalTextFor(OneOrMore(~end_ital + ~NL + ANY_CHAR
 
 @tokens_as_dict(assert_keys=("text",))
 def ital_replace(tokens):
+    if tokens["text"].startswith("This is the ") and tokens["text"].endswith(" to give people time to read and digest them as they come out."):
+        return ""
     return "\\textit{" + tokens["text"] + "}"
 
 patterns_list.append((ital_grammar, ital_replace))
@@ -133,15 +154,16 @@ MAX_INDENTS = 4
 
 def enumerate_or_itemize_replace(name, tokens):
     out_lines = []
-    indent = ""
+    initial_indent = None
     for item_toks in tokens:
         if len(item_toks) == 1:
             indent, item = "", item_toks[0]
         else:
             indent, item = item_toks
         out_lines.append(indent + "\\item " + item.rstrip())
-    out_lines = ["", indent + "\\begin{" + name + "}"] + out_lines
-    out_lines += [indent + "\\end{" + name + "}", ""]
+        initial_indent = initial_indent or indent
+    out_lines = ["", initial_indent + "\\begin{" + name + "}"] + out_lines
+    out_lines += [initial_indent + "\\end{" + name + "}", ""]
     return "\n".join(out_lines)
 
 @tokens_as_list()
@@ -152,26 +174,28 @@ def enumerate_replace(tokens):
 def itemize_replace(tokens):
     return enumerate_or_itemize_replace("itemize", tokens)
 
-for num_indents in reversed(range(MAX_INDENTS)):
+INDENT_MARKER = Literal(RAW_INDENT_MARKER)
+
+for num_indents in reversed(range(MAX_INDENTS + 1)):
     INDENT = Literal(RAW_INDENT_MARKER * num_indents)
 
     apply_indents = partial(indent_by, RAW_INDENT * num_indents)
 
     rest_of_line_and_maybe_inner_list = condense(
         REST_OF_LINE
-        + Optional(originalTextFor(Literal("\\begin{enumerate}") + SkipToAndThen(Literal("\\end{enumerate}"))) + NL)
-        + Optional(originalTextFor(Literal("\\begin{itemize}") + SkipToAndThen(Literal("\\end{itemize}"))) + NL)
+        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + Literal("\\begin{enumerate}") + SkipToAndThen(Literal("\\end{enumerate}"))) + NL)
+        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + Literal("\\begin{itemize}") + SkipToAndThen(Literal("\\end{itemize}"))) + NL)
     )
 
     # enumerate:
-    enumerate_grammar = NL.suppress() + TwoOrMore(Group(
+    enumerate_grammar = NL.suppress() + OneOrMore(Group(
         INDENT + (NUM + Literal(".")).suppress() + rest_of_line_and_maybe_inner_list
     ))
 
     patterns_list.append((enumerate_grammar, enumerate_replace))
 
     # itemize:
-    itemize_grammar = NL.suppress() + TwoOrMore(Group(
+    itemize_grammar = NL.suppress() + OneOrMore(Group(
         INDENT + Literal("*").suppress() + rest_of_line_and_maybe_inner_list
     ))
 

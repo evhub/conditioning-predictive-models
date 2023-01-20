@@ -546,8 +546,6 @@ As we discussed [previously](https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3
 
 
 1. Only ask for conditionals over the time between the most recent observation in the training set and the construction of the predictor.[^35]
-
-
 2. Include recent data, but then condition on observations in the past that differ from what was actually observed.
 
 In the first case, we have more of a guarantee that the model won’t be biased by knowing what actually happens—but are limited in what sort of training data we’re able to make use of and what sort of conditionals we’re allowed to ask for. The second case relaxes these limitations, but introduces substantial generalization difficulties in terms of getting the model to actually predict a counterfactual past rather than what it already knows in fact happened. For instance, the training set might too-strongly bias the model away from simulating events different from the ones it knows actually happened, limiting our flexibility to very minor changes in the past.
