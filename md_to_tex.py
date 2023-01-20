@@ -1,3 +1,5 @@
+from functools import partial
+
 from undebt.pattern.util import (
     tokens_as_dict,
     tokens_as_list,
@@ -9,9 +11,9 @@ from undebt.pyparsing import (
     OneOrMore,
     Optional,
     originalTextFor,
-    nestedExpr,
     Word,
     Regex,
+    Group,
 )
 from undebt.pattern.common import (
     NL,
@@ -28,7 +30,12 @@ from undebt.cmd.logic import (
 # util:
 NUM = originalTextFor(Word("0123456789"))
 
-REST_OF_LINE = originalTextFor(NL | (ANY_CHAR | WHITE) + SkipTo(NL) + NL)
+def SkipToAndThen(item):
+    return SkipTo(item) + item
+
+REST_OF_LINE = originalTextFor(NL | (ANY_CHAR | WHITE) + SkipToAndThen(NL))
+
+UNTIL_NL_NL = originalTextFor(NL + NL | (ANY_CHAR | WHITE) + SkipToAndThen(NL + NL))
 
 @tokens_as_list(assert_len=1)
 def trim(tokens):
@@ -37,6 +44,20 @@ def trim(tokens):
 PARENS = attach(originalTextFor(Literal("(") + OneOrMore(~NL + ~Literal(")") + ANY_CHAR) + Literal(")")), trim)
 BRACKETS = attach(originalTextFor(Literal("[") + OneOrMore(~NL + ~Literal("]") + ANY_CHAR) + Literal("]")), trim)
 BRACES = attach(originalTextFor(Literal("{") + OneOrMore(~NL + ~Literal("}") + ANY_CHAR) + Literal("}")), trim)
+
+def indent_by(indent, text):
+    out_lines = []
+    for line in text.splitlines(True):
+        if line:
+            line = indent + line
+        out_lines.append(line)
+    return "".join(out_lines)
+
+def TwoOrMore(item):
+    return item + OneOrMore(item)
+
+def condense(item):
+    return attach(item, "".join)
 
 
 # setup:
@@ -100,40 +121,65 @@ def bf_replace(tokens):
 patterns_list.append((bf_grammar, bf_replace))
 
 
-# enumerate:
-enumerate_grammar = NL.suppress() + (
-    (NUM + Literal(".")).suppress() + REST_OF_LINE
-) + OneOrMore(
-    (NUM + Literal(".")).suppress() + REST_OF_LINE
-)
+# mark indents:
+RAW_INDENT = " " * 4
+RAW_INDENT_MARKER = "<INDENT>"
+
+patterns_list.append((RAW_INDENT, RAW_INDENT_MARKER))
+
+
+# enumerate/itemize:
+MAX_INDENTS = 4
+
+def enumerate_or_itemize_replace(name, tokens):
+    out_lines = []
+    indent = ""
+    for item_toks in tokens:
+        if len(item_toks) == 1:
+            indent, item = "", item_toks[0]
+        else:
+            indent, item = item_toks
+        out_lines.append(indent + "\\item " + item.rstrip())
+    out_lines = ["", indent + "\\begin{" + name + "}"] + out_lines
+    out_lines += [indent + "\\end{" + name + "}", ""]
+    return "\n".join(out_lines)
 
 @tokens_as_list()
 def enumerate_replace(tokens):
-    return (
-        "\n\\begin{enumerate}\n"
-        + "".join("\item " + t.rstrip() + "\n" for t in tokens)
-        + "\end{enumerate}\n"
-    )
-
-patterns_list.append((enumerate_grammar, enumerate_replace))
-
-
-# itemize:
-itemize_grammar = NL.suppress() + (
-    Literal("-").suppress() + REST_OF_LINE
-) + OneOrMore(
-    Literal("-").suppress() + REST_OF_LINE
-)
+    return enumerate_or_itemize_replace("enumerate", tokens)
 
 @tokens_as_list()
 def itemize_replace(tokens):
-    return (
-        "\n\\begin{itemize}\n"
-        + "".join("\item " + t.rstrip() + "\n" for t in tokens)
-        + "\end{itemize}\n"
+    return enumerate_or_itemize_replace("itemize", tokens)
+
+for num_indents in reversed(range(MAX_INDENTS)):
+    INDENT = Literal(RAW_INDENT_MARKER * num_indents)
+
+    apply_indents = partial(indent_by, RAW_INDENT * num_indents)
+
+    rest_of_line_and_maybe_inner_list = condense(
+        REST_OF_LINE
+        + Optional(originalTextFor(Literal("\\begin{enumerate}") + SkipToAndThen(Literal("\\end{enumerate}"))) + NL)
+        + Optional(originalTextFor(Literal("\\begin{itemize}") + SkipToAndThen(Literal("\\end{itemize}"))) + NL)
     )
 
-patterns_list.append((itemize_grammar, itemize_replace))
+    # enumerate:
+    enumerate_grammar = NL.suppress() + TwoOrMore(Group(
+        INDENT + (NUM + Literal(".")).suppress() + rest_of_line_and_maybe_inner_list
+    ))
+
+    patterns_list.append((enumerate_grammar, enumerate_replace))
+
+    # itemize:
+    itemize_grammar = NL.suppress() + TwoOrMore(Group(
+        INDENT + Literal("*").suppress() + rest_of_line_and_maybe_inner_list
+    ))
+
+    patterns_list.append((itemize_grammar, itemize_replace))
+
+
+# unmark indents:
+patterns_list.append((RAW_INDENT_MARKER, RAW_INDENT))
 
 
 # figure:
@@ -167,37 +213,42 @@ patterns_list.append((link_grammar, link_replace))
 footnote_dict = {}
 
 footnote_recorder_grammar = (
-    NL + Literal("[^") + NUM("num") + Literal("]:") + REST_OF_LINE("text")
+    NL + Literal("[^") + NUM("num") + Literal("]:") + NL + UNTIL_NL_NL("text")
 )
 
 @tokens_as_dict(assert_keys=("num", "text"))
 def footnote_recorder_replace(tokens):
-    footnote_dict[tokens["num"]] = tokens["text"]
-    return ""
+    text_lines = []
+    for line in tokens["text"].strip().splitlines():
+        text_lines.append(line.strip())
+    footnote_dict[tokens["num"]] = "\n".join(text_lines)
+    return "\n"
 
 patterns_list.append((footnote_recorder_grammar, footnote_recorder_replace))
 
 
 # footnote replacer:
-footnote_dict = {}
-
 footnote_replacer_grammar = Literal("[^") + NUM("num") + Literal("]")
 
 @tokens_as_dict(assert_keys=("num",))
 def footnote_replacer_replace(tokens):
-    return "\\footnote{" + footnote_dict[tokens["num"]].rstrip() + "}"
+    try:
+        return "\\footnote{" + footnote_dict[tokens["num"]] + "}"
+    except:
+        print(f"known footnotes: {footnote_dict.keys()}")
+        raise
 
 patterns_list.append((footnote_replacer_grammar, footnote_replacer_replace))
 
 
-# post:
-post_grammar = (Literal("This") | Literal("this"))("this") + Literal("post")
+# # post:
+# post_grammar = (Literal("This") | Literal("this"))("this") + Literal("post")
 
-@tokens_as_dict(assert_keys=("this",))
-def post_replace(tokens):
-    return tokens["this"] + " (TODO: post -> paper)"
+# @tokens_as_dict(assert_keys=("this",))
+# def post_replace(tokens):
+#     return tokens["this"] + " (TODO: post -> paper)"
 
-patterns_list.append((post_grammar, post_replace))
+# patterns_list.append((post_grammar, post_replace))
 
 
 # main:
@@ -206,19 +257,23 @@ def main(in_fname, out_fname):
         text = fp.read()
 
     for i, (grammar, replace) in enumerate(patterns_list):
-        print("running pattern {}...".format(replace.__name__[:-len("_replace")]))
+        if isinstance(grammar, str):
+            text = text.replace(grammar, replace)
 
-        # keep running grammar until it stops producing results
-        j = 0
-        while True:
-            print("\tpass {}...".format(j + 1))
-            j += 1
-            find_and_replace = create_find_and_replace(grammar, replace)
-            results = parse_grammar(find_and_replace, text)
-            if not results:
-                break
-            else:
-                text = _transform_results(results, text)
+        else:
+            print("running pattern {}...".format(replace.__name__.removesuffix("_replace")))
+
+            # keep running grammar until it stops producing results
+            j = 0
+            while True:
+                print("\tpass {}...".format(j + 1))
+                j += 1
+                find_and_replace = create_find_and_replace(grammar, replace)
+                results = parse_grammar(find_and_replace, text)
+                if not results:
+                    break
+                else:
+                    text = _transform_results(results, text)
 
     with open(out_fname, "tw", encoding="utf-8") as fp:
         fp.write(text)
