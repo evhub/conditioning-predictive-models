@@ -1203,7 +1203,7 @@ On this spectrum, we think predictive models are comparatively easier to reason 
      Additionally, the Lucassen et al. model assumes that all future malign AIs know exactly what we’re going to condition on and can always spoof it exactly—but that’s clearly not fully true, and to the extent that it isn’t, it should work in our favor.
 
 
-_This is the final of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the final of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper._
 
 # 7. Open problems
 

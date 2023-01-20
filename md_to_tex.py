@@ -113,7 +113,7 @@ ital_grammar = begin_ital + originalTextFor(OneOrMore(~end_ital + ~NL + ANY_CHAR
 
 @tokens_as_dict(assert_keys=("text",))
 def ital_replace(tokens):
-    if tokens["text"].startswith("This is the ") and tokens["text"].endswith(" to give people time to read and digest them as they come out."):
+    if tokens["text"].startswith("This is the ") and "Each post in the sequence corresponds to a different section of the paper." in tokens["text"]:
         return ""
     return "\\textit{" + tokens["text"] + "}"
 
