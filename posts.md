@@ -2,7 +2,7 @@
 
 ## Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, Kate Woolverton
 
-_This is the first of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the first of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 _Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback._
 
@@ -180,7 +180,7 @@ Furthermore, in [Section 3](https://www.alignmentforum.org/posts/fj8faDDQEfvN2LQ
      This usage of inner and outer alignment is somewhat contrary to [how the terms were originally defined](https://www.alignmentforum.org/s/r9tYkB2a8Fp4DN8yB), since we won’t be talking about mesa-optimizers here. Since the original definitions don’t really apply in the predictive models context, however, we think our usage should be relatively unambiguous. To be fully technical, the way we’ll be using inner and outer alignment most closely matches up with the concepts of _[training goal alignment](https://www.alignmentforum.org/posts/FDJnZt8Ks2djouQTZ/how-do-we-become-confident-in-the-safety-of-a-machine#Evaluating_proposals_for_building_safe_advanced_AI)_ (for outer alignment) and _[training rationale alignment](https://www.alignmentforum.org/posts/FDJnZt8Ks2djouQTZ/how-do-we-become-confident-in-the-safety-of-a-machine#Evaluating_proposals_for_building_safe_advanced_AI)_ (for inner alignment).
 
 
-_This is the second of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the second of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 2. Outer alignment via careful conditioning
 
@@ -501,26 +501,26 @@ It is likely that the world predicted by the model contains humans querying pred
 
 The existence of predictive models in a simulation gives rise to potential self-reference and recursion in the predicted world. When the model predicts the world it has to predict outputs of predictors in the world, which in turn are trying to simulate the world and predict outputs of predictors, and so on.
 
-Importantly, the model might consider its own effect on the world when making a prediction. This can happen either directly if the model anticipates its outputs influencing the humans that view it, or indirectly if the model anticipates that other AIs will make predictions about its outputs and act based on those predictions.[^28]
+Importantly, the model might consider its own effect on the world when making a prediction. This can happen either directly if the model anticipates its outputs influencing the humans that view it, or indirectly if the predicted world is logically dependent on the prediction made, such as if the model anticipates that other AIs will make predictions about its outputs and act based on those predictions.[^101]
 
-How will our model deal with the possibility of self-reference? For an LLM trained to predict historical data this is fundamentally a question of generalization—the model knows what other models in the training data have predicted, and its own predictions have never influenced the training data, so there is no incentive in the training data to account for the impact of its own predictions on the world.[^29] However, there are likewise no examples where the prediction should have influenced the world but did not, so there are also no incentives _not_ to account for the impact of its own predictions. Thus, we could end up with a model that, when predicting the future, reasons through possible ways in which future models (including itself) will make predictions. This sort of reasoning does appear in the training data, which likely contains predictions made by past models and humans reasoning about what would happen in the future (taking into account the predictions made by themselves and others).
+How will our model deal with the possibility of self-reference? For an LLM trained to predict historical data this is fundamentally a question of generalization—the model knows what other models in the training data have predicted, and its own predictions have never influenced the training data, so there is no incentive in the training data to account for the impact of its own predictions on the world.[^102] However, there are likewise no examples where the prediction should have influenced the world but did not, so there are also no incentives _not_ to account for the impact of its own predictions. Thus, we could end up with a model that, when predicting the future, reasons through possible ways in which future models (including itself) will make predictions. This sort of reasoning does appear in the training data, which likely contains predictions made by past models and humans reasoning about what would happen in the future (taking into account the predictions made by themselves and others).
 
 There are several different ways this sort of predicting-predictions reasoning could go. One way would be to approximate any recursion, e.g. by assigning some kind of prior over predictions, and/or simulating recursion only up to a certain depth. This isn’t necessarily dangerous, but it is  unclear (and thus worrying) how the prior would be chosen and what kind of predictions this would lead to.
 
-A more dangerous scenario is where the model [directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model’s own prediction](https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models).[^30] Assuming that the model is trying to maximize predictive accuracy, it has an incentive to find a fixed point that is both stable and likely—that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined.[^31] Furthermore, rather than literal fixed points, in many cases [prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way](https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points) that makes prediction easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.[^32] In general, controlling what prediction we get when the predictor’s output affects the outcome seems likely to be extremely difficult.[^33]
+A more dangerous scenario is if the model chooses a prediction to manipulate the outcome of that prediction (or other predictions),[^103] e.g. if the model [directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model’s own prediction](https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models).[^104] Assuming that the model is trying to maximize predictive accuracy, it has an incentive to find a fixed point that is both stable and likely—that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined.[^105] Furthermore, rather than literal fixed points, in many cases [prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way](https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points) that makes prediction easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.[^106] In general, controlling what prediction we get when the predictor’s output affects the outcome seems likely to be extremely difficult.[^107]
 
 As a concrete example of a fixed point, suppose we build a model to predict stock prices. We train the model on historical stock market data and news articles, and then ask it to predict the price of a stock one year from now. If we use the model’s predictions to decide whether to buy or sell stocks—and the model is aware of this—then the model’s predictions will appear in its world model and influence stock prices in the world via our actions. This could lead to the possibility of choosing a fixed point where e.g. the model predicts the stock market will decline, causing a sell-off, causing an actual decline.
 
 Why is this dangerous? First of all, this behavior means that it is selecting its actions to influence the world—and it is doing so to reach an outcome that we are not explicitly looking for. It is optimizing over the world in a way that does not directly benefit us, and in a way that we do not understand.
 
-One concrete way that this could lead to a negative outcome is that it leads the model to predicting highly stable worlds, as those worlds are the ones that can be most accurately predicted. Highly predictable worlds are not generally good ones (e.g. live humans are harder to predict than dead ones), so this seems quite unsafe.[^34]
+One concrete way that this could lead to a negative outcome is that it leads the model to predicting highly stable worlds, as those worlds are the ones that can be most accurately predicted. Highly predictable worlds are not generally good ones (e.g. live humans are harder to predict than dead ones), so this seems quite unsafe.[^108]
 
-We might hope that the fixed points are biased towards being good, because we wouldn’t go and implement plans that the predictor expects to lead to catastrophic outcomes. However, this just means that plausible fixed points must _look_ good, and so introduces an incentive for the model to search for predictable futures that seem good to humans observing the prediction. This is particularly concerning as we do not expect humans to be particularly good at determining whether states far into the future are good or bad—they are likely to be very complex, confusing, and generally different from what we currently understand. Furthermore, even if a fixed point looks bad, that might not be enough to dissuade people from bringing it about if doing so is individually rational. In the stock market example, the price going up is preferable to it going down, but a human who is told it will go down is still better off selling their shares.
+We might hope that the fixed points are biased towards being good, because we wouldn’t go and implement plans that the predictor expects to lead to catastrophic outcomes. However, this just means that plausible fixed points must _look_ good, and so introduces an incentive for the model to search for predictable futures that seem good to humans observing the prediction. This is particularly concerning as we do not expect humans to be particularly good at determining whether states far into the future are good or bad—they are likely to be very complex, confusing, and generally different from what we currently understand. Furthermore, even if a fixed point looks bad, that might not be enough to dissuade people from bringing it about if doing so is individually rational. In the stock market example, the price going up is preferable to it going down, but any particular human who is told it will go down is still better off selling their shares in anticipation.
 
 
 ### Potential solution: Worlds without predictors
 
-We may be able to avoid the entire issue of self-fulfilling prophecies by conditioning the model to simulate the counterfactual world in which its predictions are never seen and thus have no influence. Although [non-myopia, acausal decision theory, or the exact implementation of the counterfactual can still introduce an incentive for manipulating the world](https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai), predicting a counterfactual world makes significant progress towards making a predictor blind to its influence and therefore not use it intentionally. To be careful, we would like to additionally ensure that there are no predictor AI models in the counterfactual world or that all of these models are ignored, due to issues that arise when models simulate each other.
+We may be able to avoid the entire issue of self-fulfilling prophecies by conditioning the model to simulate a counterfactual world in which its predictions are never seen and thus have no influence. Although [non-myopia, acausal decision theory, or the exact implementation of the counterfactual can still introduce an incentive for manipulating the world](https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai), predicting a counterfactual world makes significant progress towards making a predictor blind to its influence and therefore not use it intentionally. To be careful, we would like to additionally ensure that there are no predictor AI models in the counterfactual world or that all of these models are ignored, due to issues that arise when models simulate each other.
 
 Unfortunately, ignoring powerful predictive models is an unlikely thing for people to do,  increasing the odds that something weird is happening in the world. Concretely, there is a danger that the model concludes that the most likely scenario in which this happens is one where a deceptive AGI has already taken over, making it very dangerous to sample outputs from that world.
 
@@ -532,31 +532,70 @@ A related problem is that the humans in the predicted world may come to believe 
 
 A more serious problem with this approach, however, is that even if we can condition on us not looking at the output of our predictive model, our model might predict that there are still other predictive models out there predicting it—and predicting that we will look at their output—such that what output it would have produced is still relevant to its predictive accuracy. As a result of these sorts of issues where one model’s predictions can be “reflected” by another model trying to anticipate them, there seems to be no clean way to have a model that fully ignores all fixed-point-like situations.
 
-As a result, we think we probably have to condition the model so that there are _no_ powerful AIs at all in the world it is predicting—just getting it to ignore the direct consequences of its own prediction seems insufficient, due to the indirect consequences through other AI systems. Thus, we think the solution to this problem actually looks quite similar to solutions to the previous problem, though even more stringent: previously, we only needed our model to never predict from worlds containing _malign_ AIs, whereas now, we need it to only predict from worlds with no powerful AI systems at all.
+As a result, we think we probably have to condition the model so that there are _no _powerful AIs at all in the world it is predicting—just getting it to ignore the direct consequences of its own prediction seems insufficient, due to the indirect consequences through other AI systems. Thus, we think the solution to this problem actually looks quite similar to solutions to the previous problem, though even more stringent: previously, we only needed our model to never predict from worlds containing _malign_ AIs, whereas now, we need it to only predict from worlds with no powerful AI systems at all.
 
 Overall, we’re generally pessimistic about conditioning on ignoring the model’s output, though we think there’s somewhat more hope in conditioning the world so that the model—or other models like it—don’t exist at all.
 
 
 ### Potential solution: Predict the past
 
-A related approach is to only predict times that are strictly in the predictor’s past. Ideally, only predicting the past should prevent the model’s predictions from influencing the world it is predicting.
+A related approach is to only predict times that are strictly in the predictor’s past. Ideally, only predicting the past should prevent the model’s predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction.
 
 As we discussed [previously](https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#Potential_solution__Predict_the_past), there are two general approaches to getting a model to predict the past:
 
-
-
-1. Only ask for conditionals over the time between the most recent observation in the training set and the construction of the predictor.[^35]
+1. Only ask for conditionals over the time between the most recent observation in the training set and the construction of the predictor.[^109]
 2. Include recent data, but then condition on observations in the past that differ from what was actually observed.
 
 In the first case, we have more of a guarantee that the model won’t be biased by knowing what actually happens—but are limited in what sort of training data we’re able to make use of and what sort of conditionals we’re allowed to ask for. The second case relaxes these limitations, but introduces substantial generalization difficulties in terms of getting the model to actually predict a counterfactual past rather than what it already knows in fact happened. For instance, the training set might too-strongly bias the model away from simulating events different from the ones it knows actually happened, limiting our flexibility to very minor changes in the past.
 
 If the model generalizes well the second approach is very promising. We can condition on all sorts of observations that [make it unlikely for other AIs to exist](https://www.alignmentforum.org/posts/nXeLPcT9uhfG3TMPS/conditioning-generative-models) in these counterfactual pasts, and this potentially allows us to simulate very long time-spans and extract deep research insights from simulated worlds. This is a key advantage over the first approach, which restricts us to conditionals over the recent past and so is [a lot more limiting](https://www.alignmentforum.org/posts/adiszfnFgPEnRsGSr/conditioning-generative-models-with-restrictions).
 
-It is worth pointing out, however, that even in the first case there is at least one piece of information available to the model about how the future actually plays out that it could update on, which is the fact of its own existence.[^36] Such a situationally-aware model might always find a way, regardless of the conditional given to it, to end up predicting that it exists, treating its own existence as a fixed fact about the world that it ensures all predictions are consistent with. This is especially concerning because predicting itself is exactly the thing we want to avoid.
+It is worth pointing out, however, that even in the first case there is at least one piece of information available to the model about how the future actually plays out that it could update on, which is the fact of its own existence.[^110] Such a situationally-aware model might always find a way, regardless of the conditional given to it, to end up predicting that it exists, treating its own existence as a fixed fact about the world that it ensures all predictions are consistent with. This is especially concerning because predicting itself is exactly the thing we want to avoid.
 
 We might hope that only asking for conditionals over the period of time between the most recent training observation and the model’s creation solves the problem of the model steering trajectories towards its own existence, but the problem is that the time that it takes for the model to be created is not fixed across conditionals, such that it could very well end up predicting that it exists before it actually does exist—not to mention that the model itself could also be quite uncertain about how long it takes for it to be created. This is potentially an acceptable failure mode, since it might lead the model to output predictions that are only self-fulfilling prophecies in other worlds, not in our world—but if the model is capable of producing self-fulfilling prophecies that are robust across worlds this could still be quite dangerous.
 
 Another potential difficulty in both cases is if the model exploits acausal correlations to cause self-fulfilling prophecies. For example, even in a world where the model itself doesn’t exist, if models trained in similar ways exist then it could reason that its predictions will likely be similar to those models’ predictions. Such a situation where it is treating its output and that of other AIs as highly correlated is essentially isomorphic to the original self-fulfilling prophecies case. For example, if your AI was predicting another AI that was highly correlated with it, it might conclude that its output will be approximately the same as the output of the AI it’s predicting, and thus it can make the best predictions by producing outputs that would be self-fulfilling prophecies for both of them. This is another reason that we think it will likely be necessary to condition on worlds where there are no powerful AIs at all, rather than just conditioning out our AI alone.
+
+
+### Potential solution: Consequence-blindness
+
+All of the above potential solutions to self-fulfilling prophecies involve attempting to get predictions from the model in cases where its predictions can’t influence their own likelihood. Ideally, however, we might hope for a predictor that simply never takes into account the influence of the predictions it makes when considering the likelihood of those predictions. In “[Underspecification of Oracle AI](https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai),” Hudson et al. refer to this concept as _consequence-blindness._
+
+Unfortunately, consequence-blindness can be a somewhat nebulous concept. In particular, there are many ways in which a prediction can affect its own likelihood, and capturing all of them can be quite complex. A prediction can affect its own outcome through the reactions of the humans that elicited it, by having other AIs predict what prediction your AI will make, or via [acausal cooperation](https://www.lesswrong.com/tag/acausal-trade) with other agents including future/past versions of itself. A prediction can also affect other predictions by changing which questions and how many questions are asked by humans. These examples are not a comprehensive list of influence channels, but rather serve to illustrate the difficulty of defining all aspects of consequence-blindness.
+
+Due to the complexity of consequence-blindness, it is unclear whether it would naturally be favored by realistic machine learning setups and if not what could be done to increase the likelihood of getting a consequence-blind predictor. One idea might be to try to get a model with a [causal decision theory](https://plato.stanford.edu/entries/decision-causal/), since such a model would be blind to the acausal effects of its predictions, or a [lonely causal decision theory](https://www.alignmentforum.org/posts/Y76durQHrfqwgwM5o/lcdt-a-myopic-decision-theory), since such a model would also be blind to the direct causal influence of its predictions on the behavior of other agents. Unfortunately, controlling exactly what sort of a decision theory a predictive model ends up learning seems extremely difficult—assuming that decision theory is even the right concept to describe a predictor’s relationship to its predictions.
+
+
+[^101]:
+     One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model’s output back into itself—as opposed to the parallel factorization technique described previously—as that creates a situation where the model might select early predictions in the serial chain so as to make later predictions easier. For example, if the model cares about future accuracy, it could construct a pair of predictions so that the first is less accurate than possible, but which causes the second to become more accurate to compensate.
+
+[^102]:
+     There can be something similar to self-reference in the training data if the data has been influenced by a close predecessor of the model.
+
+[^103]:
+     For example, a non-myopic model could choose to manipulate the world so that it gets asked to make easier predictions in the future.
+
+[^104]:
+     Though fixed point finding is computationally difficult, the same issues occur even when the model is solving for the best approximation of a fixed point.
+
+[^105]:
+     To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.
+
+[^106]:
+     Additionally, such manipulative predictions need not correspond to any actual beliefs that the model holds, and thus might not even be useful in any way, in addition to being potentially dangerous.
+
+[^107]:
+     Theoretically, if we could specify which outcomes were desirable, we could incentivize predictions that generate those outcomes—but that would essentially just be equivalent to not using a predictor at all, since then you’re effectively just building an agent.
+
+[^108]:
+     The model may also try to influence the number of times we ask it for predictions, which also seems undesirable.
+
+[^109]:
+
+     In this approach we can still condition in counterfactual ways, but the model won’t know that our observations are counterfactual because it didn’t see observations from that time period in training.
+
+[^110]:
+     Updating on its own existence could include updating on how large of a model it is, what sort of architecture it uses, how much training data it’s seen, what sort of training data it’s seen, etc.
 
 
 ## 2e. Major challenge: Anthropic capture
@@ -655,36 +694,8 @@ Overall, we think this is a problem that’s unlikely to be addressable via any 
 [^27]:
      We could also try to mitigate the risk of predicting a superintelligent AI here via ensembling—e.g. comparing the results across similar runs and taking the majority vote. By reducing the variance on whether an individual question will be predicted to be answered by a superintelligent malign AI or a human, such an approach could make it much safer to run a lot of such trajectories without inevitably worrying that one of them would have to eventually predict a superintelligent AI. In mathematical terms, if we have a collection of random variables corresponding to whether an individual run would predict a superintelligent malign AI, reducing the variance of each variable, even if it doesn’t change the mean, can increase the probability that the sum of the random variables will be below some threshold. One problem with this approach, however, is that for it to work we have to be confident that predicting a malign superintelligent AI within the ensemble isn’t itself catastrophic—which it might be if, for example, the model predicts that such a malign AI would attempt to hack the computers it’s running on.
 
-[^28]:
-     One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model’s output back into itself—as opposed to the parallel factorization technique described previously—as that creates a situation where the model might select early predictions in the serial chain so as to make later predictions easier. For example, if the model cares about future accuracy, it could construct a pair of predictions so that the first is less accurate than possible, but which causes the second to become more accurate to compensate.
 
-[^29]:
-     There can be something similar to self-reference in the training data if the data has been influenced by a close predecessor of the model.
-
-[^30]:
-     Though fixed point finding is computationally difficult, the same issues occur even when the model is solving for the best approximation of a fixed point.
-
-[^31]:
-     To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.
-
-[^32]:
-     Additionally, such manipulative predictions need not correspond to any actual beliefs that the model holds, and thus might not even be useful in any way, in addition to being potentially dangerous.
-
-[^33]:
-     Theoretically, if we could specify which outcomes were desirable, we could incentivize predictions that generate those outcomes—but that would essentially just be equivalent to not using a predictor at all, since then you’re effectively just building an agent.
-
-[^34]:
-     The model may also try to influence the number of times we ask it for predictions, which also seems undesirable.
-
-[^35]:
-
-     In this approach we can still condition in counterfactual ways, but the model won’t know that our observations are counterfactual because it didn’t see observations from that time period in training.
-
-[^36]:
-     Updating on its own existence could include updating on how large of a model it is, what sort of architecture it uses, how much training data it’s seen, what sort of training data it’s seen, etc.
-
-
-_This is the third of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the third of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 3. The case for competitiveness
 
@@ -794,7 +805,7 @@ There are some potential solutions to this problem, though we think it is overal
      Notably, this does also open us up to some additional inner alignment concerns related to doing the internal cognitive resource management in the right way, which we discuss [later](https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as#Dealing_with_internal_cognitive_resource_management).
 
 
-_This is the fourth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the fourth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 4. Making inner alignment as easy as possible
 
@@ -1000,7 +1011,7 @@ Even beyond that, in the limit of the most powerful tools (along the lines of so
      Some ways in which situational awareness could improve performance on next token prediction include: modeling the data curation process, helping predict other AIs via the model introspecting on its own structure, the same thing for ML papers, predicting the actions of AI labs by understanding how their AIs work, the model predicting its own output if any such output shows up in training (e.g. via RLHF), etc.
 
 
-_This is the fifth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the fifth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 5. Interactions with other approaches
 
@@ -1098,7 +1109,7 @@ Second, having models early on in the amplification training procedure predictin
      It’s also worth pointing out that Gao et al. provide another piece of evidence potentially in favor of the RLHF conditioning hypothesis, which is that model scale seems to mostly change the intercept of the fit for the amount of true reward obtained after RLHF, suggesting that scale primarily operates via improving the baseline prior. If the RLHF conditioning hypothesis holds, pre-training scale operating via improving the baseline prior is exactly what it would predict—that being said, while it’s unclear what other hypotheses regarding what RLHF is doing would have predicted here, it seems quite plausible that they would have predicted the same thing and that this doesn’t actually distinguish much between them.
 
 
-_This is the sixth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the sixth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 6. Deployment strategy
 
@@ -1203,7 +1214,7 @@ On this spectrum, we think predictive models are comparatively easier to reason 
      Additionally, the Lucassen et al. model assumes that all future malign AIs know exactly what we’re going to condition on and can always spoof it exactly—but that’s clearly not fully true, and to the extent that it isn’t, it should work in our favor.
 
 
-_This is the final of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper._
+_This is the final of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Jeremy Rubinoff, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper._
 
 # 7. Open problems
 

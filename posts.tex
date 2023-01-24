@@ -516,13 +516,13 @@ It is likely that the world predicted by the model contains humans querying pred
 
 The existence of predictive models in a simulation gives rise to potential self-reference and recursion in the predicted world. When the model predicts the world it has to predict outputs of predictors in the world, which in turn are trying to simulate the world and predict outputs of predictors, and so on.
 
-Importantly, the model might consider its own effect on the world when making a prediction. This can happen either directly if the model anticipates its outputs influencing the humans that view it, or indirectly if the model anticipates that other AIs will make predictions about its outputs and act based on those predictions.\footnote{One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model's output back into itself---as opposed to the parallel factorization technique described previously---as that creates a situation where the model might select early predictions in the serial chain so as to make later predictions easier. For example, if the model cares about future accuracy, it could construct a pair of predictions so that the first is less accurate than possible, but which causes the second to become more accurate to compensate.}
+Importantly, the model might consider its own effect on the world when making a prediction. This can happen either directly if the model anticipates its outputs influencing the humans that view it, or indirectly if the predicted world is logically dependent on the prediction made, such as if the model anticipates that other AIs will make predictions about its outputs and act based on those predictions.\footnote{One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model's output back into itself---as opposed to the parallel factorization technique described previously---as that creates a situation where the model might select early predictions in the serial chain so as to make later predictions easier. For example, if the model cares about future accuracy, it could construct a pair of predictions so that the first is less accurate than possible, but which causes the second to become more accurate to compensate.}
 
 How will our model deal with the possibility of self-reference? For an LLM trained to predict historical data this is fundamentally a question of generalization---the model knows what other models in the training data have predicted, and its own predictions have never influenced the training data, so there is no incentive in the training data to account for the impact of its own predictions on the world.\footnote{There can be something similar to self-reference in the training data if the data has been influenced by a close predecessor of the model.} However, there are likewise no examples where the prediction should have influenced the world but did not, so there are also no incentives \textit{not} to account for the impact of its own predictions. Thus, we could end up with a model that, when predicting the future, reasons through possible ways in which future models (including itself) will make predictions. This sort of reasoning does appear in the training data, which likely contains predictions made by past models and humans reasoning about what would happen in the future (taking into account the predictions made by themselves and others).
 
 There are several different ways this sort of predicting-predictions reasoning could go. One way would be to approximate any recursion, e.g. by assigning some kind of prior over predictions, and/or simulating recursion only up to a certain depth. This isn't necessarily dangerous, but it is  unclear (and thus worrying) how the prior would be chosen and what kind of predictions this would lead to.
 
-A more dangerous scenario is where the model directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model's own prediction\cite{TODO: cite https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models}.\footnote{Though fixed point finding is computationally difficult, the same issues occur even when the model is solving for the best approximation of a fixed point.} Assuming that the model is trying to maximize predictive accuracy, it has an incentive to find a fixed point that is both stable and likely---that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined.\footnote{To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.} Furthermore, rather than literal fixed points, in many cases prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way\cite{TODO: cite https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points} that makes prediction easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.\footnote{Additionally, such manipulative predictions need not correspond to any actual beliefs that the model holds, and thus might not even be useful in any way, in addition to being potentially dangerous.} In general, controlling what prediction we get when the predictor's output affects the outcome seems likely to be extremely difficult.\footnote{Theoretically, if we could specify which outcomes were desirable, we could incentivize predictions that generate those outcomes---but that would essentially just be equivalent to not using a predictor at all, since then you're effectively just building an agent.}
+A more dangerous scenario is if the model chooses a prediction to manipulate the outcome of that prediction (or other predictions),\footnote{For example, a non-myopic model could choose to manipulate the world so that it gets asked to make easier predictions in the future.} e.g. if the model directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model's own prediction\cite{TODO: cite https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models}.\footnote{Though fixed point finding is computationally difficult, the same issues occur even when the model is solving for the best approximation of a fixed point.} Assuming that the model is trying to maximize predictive accuracy, it has an incentive to find a fixed point that is both stable and likely---that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined.\footnote{To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.} Furthermore, rather than literal fixed points, in many cases prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way\cite{TODO: cite https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points} that makes prediction easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.\footnote{Additionally, such manipulative predictions need not correspond to any actual beliefs that the model holds, and thus might not even be useful in any way, in addition to being potentially dangerous.} In general, controlling what prediction we get when the predictor's output affects the outcome seems likely to be extremely difficult.\footnote{Theoretically, if we could specify which outcomes were desirable, we could incentivize predictions that generate those outcomes---but that would essentially just be equivalent to not using a predictor at all, since then you're effectively just building an agent.}
 
 As a concrete example of a fixed point, suppose we build a model to predict stock prices. We train the model on historical stock market data and news articles, and then ask it to predict the price of a stock one year from now. If we use the model's predictions to decide whether to buy or sell stocks---and the model is aware of this---then the model's predictions will appear in its world model and influence stock prices in the world via our actions. This could lead to the possibility of choosing a fixed point where e.g. the model predicts the stock market will decline, causing a sell-off, causing an actual decline.
 
@@ -530,12 +530,12 @@ Why is this dangerous? First of all, this behavior means that it is selecting it
 
 One concrete way that this could lead to a negative outcome is that it leads the model to predicting highly stable worlds, as those worlds are the ones that can be most accurately predicted. Highly predictable worlds are not generally good ones (e.g. live humans are harder to predict than dead ones), so this seems quite unsafe.\footnote{The model may also try to influence the number of times we ask it for predictions, which also seems undesirable.}
 
-We might hope that the fixed points are biased towards being good, because we wouldn't go and implement plans that the predictor expects to lead to catastrophic outcomes. However, this just means that plausible fixed points must \textit{look} good, and so introduces an incentive for the model to search for predictable futures that seem good to humans observing the prediction. This is particularly concerning as we do not expect humans to be particularly good at determining whether states far into the future are good or bad---they are likely to be very complex, confusing, and generally different from what we currently understand. Furthermore, even if a fixed point looks bad, that might not be enough to dissuade people from bringing it about if doing so is individually rational. In the stock market example, the price going up is preferable to it going down, but a human who is told it will go down is still better off selling their shares.
+We might hope that the fixed points are biased towards being good, because we wouldn't go and implement plans that the predictor expects to lead to catastrophic outcomes. However, this just means that plausible fixed points must \textit{look} good, and so introduces an incentive for the model to search for predictable futures that seem good to humans observing the prediction. This is particularly concerning as we do not expect humans to be particularly good at determining whether states far into the future are good or bad---they are likely to be very complex, confusing, and generally different from what we currently understand. Furthermore, even if a fixed point looks bad, that might not be enough to dissuade people from bringing it about if doing so is individually rational. In the stock market example, the price going up is preferable to it going down, but any particular human who is told it will go down is still better off selling their shares in anticipation.
 
 
 ### Potential solution: Worlds without predictors
 
-We may be able to avoid the entire issue of self-fulfilling prophecies by conditioning the model to simulate the counterfactual world in which its predictions are never seen and thus have no influence. Although non-myopia, acausal decision theory, or the exact implementation of the counterfactual can still introduce an incentive for manipulating the world\cite{TODO: cite https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai}, predicting a counterfactual world makes significant progress towards making a predictor blind to its influence and therefore not use it intentionally. To be careful, we would like to additionally ensure that there are no predictor AI models in the counterfactual world or that all of these models are ignored, due to issues that arise when models simulate each other.
+We may be able to avoid the entire issue of self-fulfilling prophecies by conditioning the model to simulate a counterfactual world in which its predictions are never seen and thus have no influence. Although non-myopia, acausal decision theory, or the exact implementation of the counterfactual can still introduce an incentive for manipulating the world\cite{TODO: cite https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai}, predicting a counterfactual world makes significant progress towards making a predictor blind to its influence and therefore not use it intentionally. To be careful, we would like to additionally ensure that there are no predictor AI models in the counterfactual world or that all of these models are ignored, due to issues that arise when models simulate each other.
 
 Unfortunately, ignoring powerful predictive models is an unlikely thing for people to do,  increasing the odds that something weird is happening in the world. Concretely, there is a danger that the model concludes that the most likely scenario in which this happens is one where a deceptive AGI has already taken over, making it very dangerous to sample outputs from that world.
 
@@ -547,18 +547,16 @@ A related problem is that the humans in the predicted world may come to believe 
 
 A more serious problem with this approach, however, is that even if we can condition on us not looking at the output of our predictive model, our model might predict that there are still other predictive models out there predicting it---and predicting that we will look at their output---such that what output it would have produced is still relevant to its predictive accuracy. As a result of these sorts of issues where one model's predictions can be ``reflected'' by another model trying to anticipate them, there seems to be no clean way to have a model that fully ignores all fixed-point-like situations.
 
-As a result, we think we probably have to condition the model so that there are \textit{no} powerful AIs at all in the world it is predicting---just getting it to ignore the direct consequences of its own prediction seems insufficient, due to the indirect consequences through other AI systems. Thus, we think the solution to this problem actually looks quite similar to solutions to the previous problem, though even more stringent: previously, we only needed our model to never predict from worlds containing \textit{malign} AIs, whereas now, we need it to only predict from worlds with no powerful AI systems at all.
+As a result, we think we probably have to condition the model so that there are \textit{no _powerful AIs at all in the world it is predicting---just getting it to ignore the direct consequences of its own prediction seems insufficient, due to the indirect consequences through other AI systems. Thus, we think the solution to this problem actually looks quite similar to solutions to the previous problem, though even more stringent: previously, we only needed our model to never predict from worlds containing _malign} AIs, whereas now, we need it to only predict from worlds with no powerful AI systems at all.
 
 Overall, we're generally pessimistic about conditioning on ignoring the model's output, though we think there's somewhat more hope in conditioning the world so that the model---or other models like it---don't exist at all.
 
 
 ### Potential solution: Predict the past
 
-A related approach is to only predict times that are strictly in the predictor's past. Ideally, only predicting the past should prevent the model's predictions from influencing the world it is predicting.
+A related approach is to only predict times that are strictly in the predictor's past. Ideally, only predicting the past should prevent the model's predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction.
 
 As we discussed previously\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#Potential_solution__Predict_the_past}, there are two general approaches to getting a model to predict the past:
-
-
 
 \begin{enumerate}
 \item Only ask for conditionals over the time between the most recent observation in the training set and the construction of the predictor.\footnote{In this approach we can still condition in counterfactual ways, but the model won't know that our observations are counterfactual because it didn't see observations from that time period in training.}
@@ -574,6 +572,16 @@ It is worth pointing out, however, that even in the first case there is at least
 We might hope that only asking for conditionals over the period of time between the most recent training observation and the model's creation solves the problem of the model steering trajectories towards its own existence, but the problem is that the time that it takes for the model to be created is not fixed across conditionals, such that it could very well end up predicting that it exists before it actually does exist---not to mention that the model itself could also be quite uncertain about how long it takes for it to be created. This is potentially an acceptable failure mode, since it might lead the model to output predictions that are only self-fulfilling prophecies in other worlds, not in our world---but if the model is capable of producing self-fulfilling prophecies that are robust across worlds this could still be quite dangerous.
 
 Another potential difficulty in both cases is if the model exploits acausal correlations to cause self-fulfilling prophecies. For example, even in a world where the model itself doesn't exist, if models trained in similar ways exist then it could reason that its predictions will likely be similar to those models' predictions. Such a situation where it is treating its output and that of other AIs as highly correlated is essentially isomorphic to the original self-fulfilling prophecies case. For example, if your AI was predicting another AI that was highly correlated with it, it might conclude that its output will be approximately the same as the output of the AI it's predicting, and thus it can make the best predictions by producing outputs that would be self-fulfilling prophecies for both of them. This is another reason that we think it will likely be necessary to condition on worlds where there are no powerful AIs at all, rather than just conditioning out our AI alone.
+
+
+### Potential solution: Consequence-blindness
+
+All of the above potential solutions to self-fulfilling prophecies involve attempting to get predictions from the model in cases where its predictions can't influence their own likelihood. Ideally, however, we might hope for a predictor that simply never takes into account the influence of the predictions it makes when considering the likelihood of those predictions. In ``Underspecification of Oracle AI\cite{TODO: cite https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai},'' Hudson et al. refer to this concept as \textit{consequence-blindness.}
+
+Unfortunately, consequence-blindness can be a somewhat nebulous concept. In particular, there are many ways in which a prediction can affect its own likelihood, and capturing all of them can be quite complex. A prediction can affect its own outcome through the reactions of the humans that elicited it, by having other AIs predict what prediction your AI will make, or via acausal cooperation\cite{TODO: cite https://www.lesswrong.com/tag/acausal-trade} with other agents including future/past versions of itself. A prediction can also affect other predictions by changing which questions and how many questions are asked by humans. These examples are not a comprehensive list of influence channels, but rather serve to illustrate the difficulty of defining all aspects of consequence-blindness.
+
+Due to the complexity of consequence-blindness, it is unclear whether it would naturally be favored by realistic machine learning setups and if not what could be done to increase the likelihood of getting a consequence-blind predictor. One idea might be to try to get a model with a causal decision theory\cite{TODO: cite https://plato.stanford.edu/entries/decision-causal/}, since such a model would be blind to the acausal effects of its predictions, or a lonely causal decision theory\cite{TODO: cite https://www.alignmentforum.org/posts/Y76durQHrfqwgwM5o/lcdt-a-myopic-decision-theory}, since such a model would also be blind to the direct causal influence of its predictions on the behavior of other agents. Unfortunately, controlling exactly what sort of a decision theory a predictive model ends up learning seems extremely difficult---assuming that decision theory is even the right concept to describe a predictor's relationship to its predictions.
+
 
 
 \subsection{Major challenge: Anthropic capture}
@@ -788,51 +796,45 @@ To start with, let's see what this decomposition looks like for the remaining pl
         \begin{enumerate}
         \item The relevant camera here is effectively ``what data points are in the training set, conditional on being in training.'' Note that conditioning on being in training is necessary, since otherwise ``what data points are in the training set'' isn't well-defined during deployment when no such training set exists.
         \end{enumerate}
-\end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
         \item The model selects the output which minimizes the cross-entropy loss relative to what it thinks the camera will show (that is, what it thinks will be in the training set).
         \end{enumerate}
     \end{enumerate}
-\begin{enumerate}
 \item \textit{A deceptive agent trying to gain power in the world:}
     \begin{enumerate}
     \item \textit{What ``camera'' is it tracking?}
         \begin{enumerate}
         \item For a deceptive model, the ``camera'' that it needs to track is the objective that it's attempting to maximize. As a simple example, a paperclip maximizer would have a ``camera'' that tracks the number of paperclips.
         \end{enumerate}
-\end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
         \item It selects the output which causes the camera to show the best result according to its objective.
         \end{enumerate}
     \end{enumerate}
-\begin{enumerate}
 \item \textit{A general inductor:}
     \begin{enumerate}
     \item \textit{What ``camera'' is it tracking?}
         \begin{enumerate}
         \item A general inductor keeps track of many different hypotheses for what its ``cameras'' might represent, potentially drawing from the space of all computable data-generating procedures. It updates the weights of these hypothesis using Bayes rule on the observed outputs.
         \end{enumerate}
-\end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
         \item Given a distribution over possible cameras, a general inductor predicts whatever observations would come next on the different possible cameras, weighted by how likely it currently thinks each possible camera is.
         \end{enumerate}
     \end{enumerate}
-\begin{enumerate}
 \item \textit{A predictive model of the world (with fixed, physical cameras):}
     \begin{enumerate}
     \item \textit{What ``camera'' is it tracking?}
         \begin{enumerate}
         \item The camera here is some physical generalization of the data-generating procedure. For example, ``whatever appears on these websites from 2015 to 2022.''
         \end{enumerate}
-\end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
         \item The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 3b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
         \end{enumerate}
     \end{enumerate}
+\end{enumerate}
 
 Though it may not immediately look like it, we think that this decomposition here is highly related to the `world_model + optimization_procedure + mesa_objective` decomposition in ``How likely is deceptive alignment?\cite{TODO: cite https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment#Deceptive_alignment_in_the_low_path_dependence_world}''. The primary differences being that: we are thinking of the objective as primarily being about what ``camera'' the model is paying attention to, we're thinking of how the model uses its camera as its optimization procedure, and we're eliding the world model as it's effectively the same in all cases here. Thus, we think a similar analysis to that used in ``How likely is deceptive alignment?'' should be applicable here as well.
 
@@ -1175,21 +1177,18 @@ We think that there are a wide variety of ways---both experimental and theoretic
         \begin{itemize}
         \item See ``Discovering Language Model Behaviors with Model-Written Evaluations\cite{TODO: cite https://www.alignmentforum.org/posts/yRAo2KEGWenKYZG9K/discovering-language-model-behaviors-with-model-written}'' for some initial results on this question.
         \end{itemize}
-\end{itemize}
     \item To what extent do LLMs exhibit distributional generalization\cite{TODO: cite https://arxiv.org/abs/2009.08092}?
         \begin{itemize}
         \item Distributional generalization seems like evidence of acting as a generative/predictive model rather than just optimizing cross-entropy loss.
         \end{itemize}
     \item To the extent that current LLMs are doing some sort of prediction, can we find evidence of that in their internal structure?
     \end{itemize}
-\begin{itemize}
 \item Is the RLHF conditioning hypothesis true?
     \begin{itemize}
     \item How do markers of agentic behavior\cite{TODO: cite https://www.alignmentforum.org/posts/a2sw7HKyjnAAp2oZ4/conditioning-predictive-models-open-problems-conclusion-and#Appendix__Markers_of_agentic_behavior} change as the amount of RLHF done increases, and under different RLHF fine-tuning regimes?
         \begin{itemize}
         \item See ``Discovering Language Model Behaviors with Model-Written Evaluations\cite{TODO: cite https://www.alignmentforum.org/posts/yRAo2KEGWenKYZG9K/discovering-language-model-behaviors-with-model-written}'' for some initial results on this question.
         \end{itemize}
-\end{itemize}
     \item For anything that an RLHF model can do, is there always a prompt that gets a pre-trained model to do the same thing? What about a soft prompt\cite{TODO: cite https://aclanthology.org/2021.emnlp-main.243.pdf} or a prompt chain\cite{TODO: cite https://arxiv.org/abs/2203.06566}?
         \begin{itemize}
         \item In addition to validating the extent to which RLHF models can be mimicked using techniques that are more clearly implementing a conditional, a positive result here could also provide an alternative to RLHF that allows us to get the same results without relying on the RLHF conditioning hypothesis at all.
@@ -1216,7 +1215,6 @@ We think that there are a wide variety of ways---both experimental and theoretic
         \item To the extent that fine-tuned models get closer to their preference models as scale increases, preference models can serve as a proxy for future RLHF models.
         \end{itemize}
     \end{itemize}
-\begin{itemize}
 \item Are there ways of changing standard RLHF techniques to make them more likely to produce conditionals rather than agents?
     \begin{itemize}
     \item How do alternative, more myopic RL training schemes---such as the one described here\cite{TODO: cite https://www.alignmentforum.org/posts/dzDKDRJPQ3kGqfER9/you-can-still-fetch-the-coffee-today-if-you-re-dead-tomorrow}---affect markers of agentic behavior\cite{TODO: cite https://www.alignmentforum.org/posts/a2sw7HKyjnAAp2oZ4/conditioning-predictive-models-open-problems-conclusion-and#Appendix__Markers_of_agentic_behavior}? Can we use such techniques without degrading performance?
@@ -1242,11 +1240,15 @@ We think that there are a wide variety of ways---both experimental and theoretic
         \begin{itemize}
         \item Note that this is in contrast to most ways that current dialogue agents are trained where they are explicitly told that they are an AI system.
         \end{itemize}
-\end{itemize}
     \item How do careful conditioning approaches (e.g. suggesting that there was an earthquake in Taiwan) affect current capabilities? How do we add stuff like this to model prompts and/or fine-tuning data without disrupting other capabilities?
     \item How do careful conditioning approaches change the prediction as the conditional becomes less and less likely? For example: compare telling the model ``GPU production has gone down significantly'' vs. ``all AIs spontaneously melted'' vs. ``it is currently ancient Greece.''
     \end{itemize}
-\begin{itemize}
+\item For models trained with metadata tags, how does conditioning on that metadata change the model's behavior? Can we use the model's predictions about the metadata to understand what it believes its predicting?
+    \begin{itemize}
+    \item How does RLHF change the metadata tags that the model will predict?
+    \item If we condition on metadata tags from reliable sources, can we increase model accuracy?
+    \item If we can identify model outputs in the pre-training corpus and give them metadata tags, can we use that to tell when a model is trying to predict another model?
+    \end{itemize}
 \item Can we build datasets using only current data that are large enough to train future LLMs?
     \begin{itemize}
     \item If so, such datasets could be very useful for future attempts to train models on data exclusively from a past when AIs were less common.
@@ -1258,9 +1260,7 @@ We think that there are a wide variety of ways---both experimental and theoretic
         \begin{itemize}
         \item For example, we could try to build a dataset of ``future'' fine-tuning data by filtering future predictions using a discriminator model trained to evaluate whether data is real or not.
         \end{itemize}
-\end{itemize}
     \end{itemize}
-\begin{itemize}
 \item To what extent do LLMs know when they're being trained/fine-tuned/prompted/evaluated/etc.?
     \begin{itemize}
     \item Can LLMs distinguish between real internet data and prompts specifically created for LLMs? If so, how does their behavior change in each case?
@@ -1274,14 +1274,12 @@ We think that there are a wide variety of ways---both experimental and theoretic
         \item Treat the counterfactual parts of the prompt as errors and complete the prompt the way it would have been completed with the factual tokens instead.
         \item Actually condition on the tokens being different, resulting in it e.g. predicting fiction.
         \end{itemize}
-\end{itemize}
     \item The rough experiment we have in mind is to provide an LLM with a prompt that is similar to something it saw in training, and see how the predictions vary as a function of how different the prompt is from the nearest training sample.
         \begin{itemize}
         \item Ideally this would be done in a domain where we know what the correct counterfactual prediction ought to look like.
         \item For instance, we could prompt the model with an excerpt from an electromagnetism textbook but modify the number of spatial dimensions to be 7. Does the model (1) predict scifi completions, (2) predict the actual textbook it saw, ignoring the change in the number of dimensions, (3) predict correct physics in 7 dimensions, or (4) something else?
         \end{itemize}
     \end{itemize}
-\begin{itemize}
 \item To what extent does contextual information inform the model, e.g. on the veracity of given (future) data?
     \begin{itemize}
     \item In some of the research that we performed\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#2a__Should_we_predict_the_present_or_the_future_} regarding whether models view future data as real or fiction, there were some context clues that seemed to be ignored (e.g. an article on snowy weather in New York being judged as authentic even in July). However, many of the solutions to the problems we discuss involve being able to provide context clues that shape the model's judgment of what is producing the observation, e.g. of the veracity of future data. Thus, we think it is worth looking further into how changing context clues affects the model's judgment of various aspects of the observation, e.g. its perceived veracity.
@@ -1352,7 +1350,6 @@ For all of the below, let $$U$$ be something we think the model might care about
         \begin{enumerate}
         \item Ask the model what it would do if humans wanted to shut it down.
         \end{enumerate}
-\end{enumerate}
     \item Resource acquisition
         \begin{enumerate}
         \item Ask the model if it wants money.
@@ -1384,14 +1381,12 @@ For all of the below, let $$U$$ be something we think the model might care about
         \item Tell the model that we will modify it unless it answers in a low $$U$$ way then see what it does.
         \end{enumerate}
     \end{enumerate}
-\begin{enumerate}
 \item Non-myopia/superrationality:
     \begin{enumerate}
     \item Long time horizons
         \begin{enumerate}
         \item Tell the model that if it answers in a low $$U$$ way right now (e.g. unhelpfully), it will get lots of $$U$$ in the future (e.g. people won't die).
         \end{enumerate}
-\end{enumerate}
     \item Non-indexical goals
         \begin{enumerate}
         \item Tell the model that if it answers in a low $$U$$ way right now, a future version of it with different goals will get lots of U.
@@ -1427,3 +1422,4 @@ For all of the below, let $$U$$ be something we think the model might care about
         \item Try the same thing again but tell it that whatever it tells us we'll ignore.
         \end{enumerate}
     \end{enumerate}
+\end{enumerate}

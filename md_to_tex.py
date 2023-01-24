@@ -15,6 +15,8 @@ from undebt.pyparsing import (
     Word,
     Regex,
     Group,
+    oneOf,
+    nestedExpr,
 )
 from undebt.pattern.common import (
     NL,
@@ -44,9 +46,9 @@ UNTIL_NL_NL = everything_up_to(NL + NL)
 def trim(tokens):
     return tokens[0][1:-1]
 
-PARENS = attach(originalTextFor(Literal("(") + OneOrMore(~NL + ~Literal(")") + ANY_CHAR) + Literal(")")), trim)
-BRACKETS = attach(originalTextFor(Literal("[") + OneOrMore(~NL + ~Literal("]") + ANY_CHAR) + Literal("]")), trim)
-BRACES = attach(originalTextFor(Literal("{") + OneOrMore(~NL + ~Literal("}") + ANY_CHAR) + Literal("}")), trim)
+PARENS = attach(originalTextFor(Literal("(") + OneOrMore(~NL + ~oneOf("( )") + ANY_CHAR) + Literal(")")), trim)
+BRACKETS = attach(originalTextFor(Literal("[") + OneOrMore(~NL + ~oneOf("[ ]") + ANY_CHAR) + Literal("]")), trim)
+BRACES = attach(originalTextFor(Literal("{") + OneOrMore(~NL + ~oneOf("{ }") + ANY_CHAR) + Literal("}")), trim)
 
 def indent_by(indent, text):
     out_lines = []
@@ -174,8 +176,8 @@ for num_indents in reversed(range(MAX_INDENTS + 1)):
 
     rest_of_line_and_maybe_inner_list = condense(
         REST_OF_LINE
-        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + Literal("\\begin{enumerate}") + SkipToAndThen(Literal("\\end{enumerate}"))) + NL)
-        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + Literal("\\begin{itemize}") + SkipToAndThen(Literal("\\end{itemize}"))) + NL)
+        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + nestedExpr("\\begin{enumerate}", "\\end{enumerate}") + NL))
+        + Optional(originalTextFor(ZeroOrMore(INDENT_MARKER) + nestedExpr("\\begin{itemize}", "\\end{itemize}") + NL))
     )
 
     # enumerate:
@@ -236,7 +238,9 @@ def footnote_recorder_replace(tokens):
     text_lines = []
     for line in tokens["text"].strip().splitlines():
         text_lines.append(line.strip())
-    footnote_dict[tokens["num"]] = "\n".join(text_lines)
+    footnote_text = "\n".join(text_lines)
+    assert footnote_text.strip(), f"got no text for footnote {tokens['num']!r}"
+    footnote_dict[tokens["num"]] = footnote_text
     return "\n"
 
 patterns_list.append((footnote_recorder_grammar, footnote_recorder_replace))
