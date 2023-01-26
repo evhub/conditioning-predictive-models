@@ -88,11 +88,14 @@
 \begin{document}
 
 \title{Conditioning Predictive Models: Risks and Strategies}
+
 \author{Evan Hubinger \\ Anthropic; some research conducted while at Machine Intelligence Research Institute}
 \author{Adam Jermyn \\ Anthropic; TODO}
 \author{Johannes Treutlein \\ TODO}
 \author{Jeremy Rubinoff \\ TODO}
-\author{Kate Woolverton \\ TODO\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback. Additional thanks to TODO for helping create this paper out of the Alignment Forum post that preceded it.\cite{TODO: cite post}}}
+\author{Kate Woolverton \\ TODO}
+
+\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.\cite{TODO: cite post}}
 
 \date{Jan 19, 2023}
 
@@ -1134,7 +1137,9 @@ We don't think it's particularly necessary for safety research effort to go into
 
 An alternative to standard RL fine-tuning is to train a decision transformer\cite{TODO: cite https://arxiv.org/abs/2106.01345}, a model that predicts what reward it will get before producing the output that has that reward, thus allowing high reward trajectories to be sampled via conditioning on a high reward output. Decision transformers can be trained via supervised learning rather than explicit RL updates, which might make them less problematic---but as we discussed previously\cite{TODO: cite https://www.alignmentforum.org/posts/3ydumADYt9xkaKRTF/conditioning-predictive-models-interactions-with-other#Supervised_fine_tuning}, even if we're doing supervised fine-tuning, if it's not continuous with pre-training there's no particular reason to believe that doing so preserves the safety properties of the pre-trained model.
 
-However, there is another reason to like decision transformers as well, which is that they give us substantially more control over how we condition on high reward: in particular, we get to condition on exactly the level of reward that we want, rather than just ``high reward'' in general. This could give us substantially more ability to stick precisely to the capability elicitation frontier, as we discussed previously\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#Potential_solution__Ask_for_less}, rather than accidentally asking the model for more capabilities than it has and thus needlessly exposing us to additional danger for no performance benefit. That being said, additional control over the level of capabilities that we're asking for can also be a double-edged sword, as decision transformers can also make it easier to accidentally ask for far more capabilities than are available to be elicited if they are conditioned on rewards much higher than they have ever seen before---as a result, decision transformers more dangerous than normal RL fine-tuning in the hands of an uncareful user.
+However, there is another reason to like decision transformers as well, which is that they give us substantially more control over how we condition on high reward: in particular, we get to condition on exactly the level of reward that we want, rather than just ``high reward'' in general. This could give us substantially more ability to stick precisely to the capability elicitation frontier, as we discussed previously\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#Potential_solution__Ask_for_less}, rather than accidentally asking the model for more capabilities than it has and thus needlessly exposing us to additional danger for no performance benefit. This usage of decision transformers is effectively treating them as a quantilizer\cite{TODO: cite https://intelligence.org/files/QuantilizersSaferAlternative.pdf}.
+
+That being said, additional control over the level of capabilities that we're asking for can also be a double-edged sword, as decision transformers can also make it easier to accidentally ask for far more capabilities than are available to be elicited if they are conditioned on rewards much higher than they have ever seen before---as a result, decision transformers more dangerous than normal RL fine-tuning in the hands of an uncareful user.
 
 
 \subsection{Imitative amplification}
