@@ -1,9 +1,16 @@
-@misc{post,
-    author={Evan Hubinger},
-    title={An overview of 11 proposals for building safe advanced {AI}},
-    year=2020,
-    url={https://www.alignmentforum.org/posts/fRsjBseRuvRhMPPE5/an-overview-of-11-proposals-for-building-safe-advanced-ai},
+
+@techreport{11_proposals,
+	title = {An overview of 11 proposals for building safe advanced {AI}},
+	url = {http://arxiv.org/abs/2012.07532},
+	abstract = {This paper analyzes and compares 11 diﬀerent proposals for building safe advanced AI under the current machine learning paradigm, including major contenders such as iterated ampliﬁcation, AI safety via debate, and recursive reward modeling. Each proposal is evaluated on the four components of outer alignment, inner alignment, training competitiveness, and performance competitiveness, of which the distinction between the latter two is introduced in this paper. While prior literature has primarily focused on analyzing individual proposals, or primarily focused on outer alignment at the expense of inner alignment, this analysis seeks to take a comparative look at a wide range of proposals including a comparative analysis across all four previously mentioned components.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Hubinger, Evan},
+	month = dec,
+	year = {2020},
 }
+
 
 @article{amplification,
     author={Paul Christiano and Buck Shlegeris and Dario Amodei},
@@ -431,7 +438,7 @@
     author={Paul Christiano},
     title={Open question: are minimal circuits daemon-free?},
     year=2018,
-    url={https://www.lesswrong.com/posts/nyCHnY7T5PHPLjxmN/open-question-are-minimal-circuits-daemon-free},
+    url={https://www.lesswrong.com/posts/nyCHnY7T5PHPLjxmN/open-question-are-`circuits-daemon-free},
 }
 
 @misc{chris,
@@ -570,4 +577,526 @@
     title={Optimization daemons},
     year=2018,
     url={https://wiki.lesswrong.com/wiki/Optimization_daemons},
+}
+
+@misc{induction-heads,
+    author={Catherine Olsson and Nelson Elhage and Neel Nanda and Nicholas Joseph and Nova DasSarma and Tom Henighan and 
+    Ben Mann and Amanda Askell and Yuntao Bai and Anna Chen and Tom Conerly and Dawn Drain and Deep Ganguli and Zac Hatfield-Dodds and 
+    Danny Hernandez and Scott Johnston and Andy Jones and Jackson Kernion and Liane Lovitt and Kamal Ndousse and Dario Amodei and Tom Brown and 
+    Jack Clark and Jared Kaplan and Sam McCandlish and Chris Olah},
+    title={In-context Learning and Induction Heads},
+    year=2022,
+    url={https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html},
+}
+
+@article{elk,
+	title = {Eliciting latent knowledge: How to tell if your eyes deceive you},
+	shorttitle = {Eliciting latent knowledge},
+	url = {https://www.alignmentforum.org/posts/qHCDysDnvhteW7kRd/arc-s-first-technical-report-eliciting-latent-knowledge},
+	abstract = {ARC has published a report on Eliciting Latent Knowledge, an open problem which we believe is central to alignment. We think reading this report is the clearest way to understand what problems we are…},
+	language = {en},
+	year = {2021},
+	author = {Paul Christiano and Mark Xu and Ajeya Cotra},
+}
+
+
+@article{simulators,
+	title = {Simulators},
+	url = {https://www.alignmentforum.org/posts/vJFdjigzmcXMhNTsx/simulators},
+	language = {en},
+	year = {2022},
+	author = {Janus},
+}
+
+@article{how_become_confident,
+	title = {How do we become confident in the safety of a machine learning system?},
+	url = {https://www.alignmentforum.org/posts/FDJnZt8Ks2djouQTZ/how-do-we-become-confident-in-the-safety-of-a-machine},
+	language = {en},
+	year=2021,
+	author = {Hubinger, Evan},
+}
+
+@misc{wikipedia_bayesian_network,
+	title = {Bayesian network},
+	url = {https://en.wikipedia.org/w/index.php?title=Bayesian_network&oldid=1134656115},
+	journal = {Wikipedia},
+	month = jan,
+	year = {2023},
+}
+
+@article{lms_multiverse_generators,
+	title = {Language models are multiverse generators},
+	url = {https://generative.ink/posts/language-models-are-multiverse-generators/},
+	language = {en},
+	year = {2021},
+	author = {Janus},
+}
+
+@misc{kl_penalty,
+    author={Tomek Korbak and Ethan Perez},
+    title={RL with KL penalties is better seen as Bayesian inference},
+    year=2022,
+    url={https://www.lesswrong.com/posts/eoHbneGvqDu25Hasc/rl-with-kl-penalties-is-better-seen-as-bayesian-inference},
+}
+
+@misc{multiple_worlds,
+    author={Evan Hubinger},
+    title={Multiple Worlds, One Universal Wave Function},
+    year=2020,
+    url={https://www.lesswrong.com/posts/2D9s6kpegDQtrueBE/multiple-worlds-one-universal-wave-function},
+}
+
+@techreport{deep_RL_human_pref,
+	title = {Deep reinforcement learning from human preferences},
+	url = {http://arxiv.org/abs/1706.03741},
+	abstract = {For sophisticated reinforcement learning (RL) systems to interact usefully with real-world environments, we need to communicate complex goals to these systems. In this work, we explore goals deﬁned in terms of (non-expert) human preferences between pairs of trajectory segments. We show that this approach can effectively solve complex RL tasks without access to the reward function, including Atari games and simulated robot locomotion, while providing feedback on less than 1\% of our agent’s interactions with the environment. This reduces the cost of human oversight far enough that it can be practically applied to state-of-the-art RL systems. To demonstrate the ﬂexibility of our approach, we show that we can successfully train complex novel behaviors with about an hour of human time. These behaviors and environments are considerably more complex than any which have been previously learned from human feedback.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Christiano, Paul and Leike, Jan and Brown, Tom B. and Martic, Miljan and Legg, Shane and Amodei, Dario},
+	month = jul,
+	year = {2017},
+}
+
+@techreport{chain_of_thought,
+	title = {Chain-of-{Thought} {Prompting} {Elicits} {Reasoning} in {Large} {Language} {Models}},
+	url = {http://arxiv.org/abs/2201.11903},
+	abstract = {We explore how generating a chain of thought—a series of intermediate reasoning steps—signiﬁcantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufﬁciently large language models via a simple method called chain-ofthought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a PaLM 540B with just eight chain-of-thought exemplars achieves state-of-the-art accuracy on the GSM8K benchmark of math word problems, surpassing even ﬁnetuned GPT-3 with a veriﬁer.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+	month = jan,
+	year = {2023},
+}
+
+@misc{how_likely_deception,
+    author={Evan Hubinger},
+    title={How likely is deceptive alignment?},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment},
+}
+
+
+@misc{aligning_lms_follow_instructions,
+	title = {Aligning {Language} {Models} to {Follow} {Instructions}},
+	url = {https://openai.com/blog/instruction-following/},
+	abstract = {We've trained language models that are much better at following user intentions
+than GPT-3 while also making them more truthful and less toxic, using techniques
+developed through our alignment research. These InstructGPT models, which are
+trained with humans in the loop, are now deployed as the default language models},
+	language = {en},
+	urldate = {2023-01-31},
+	journal = {OpenAI},
+	month = jan,
+	year = {2022},
+}
+
+@misc{verification_not_easier,
+    author={John Wentworth},
+    title={Verification Is Not Easier Than Generation In General},
+    year=2022,
+    url={https://www.lesswrong.com/posts/2PDC69DDJuAx6GANa/verification-is-not-easier-than-generation-in-general},
+}
+
+@misc{janus_gpt_wrangling,
+    author={Janus},
+    title={Janus' GPT Wrangling},
+    year=2022,
+    url={https://astralcodexten.substack.com/p/janus-gpt-wrangling},
+}
+
+@misc{latent_adversarial_training,
+    author={Adam Jermyn},
+    title={Latent Adversarial Training},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/atBQ3NHyqnBadrsGP/latent-adversarial-training},
+}
+
+@misc{fun_with_12_ooms,
+    author={Daniel Kokotajlo},
+    title={Fun with +12 OOMs of Compute},
+    year=2021,
+    url={https://www.alignmentforum.org/posts/rzqACeBGycZtqCfaX/fun-with-12-ooms-of-compute#Amp_GPT_7__},
+}
+
+@misc{conditioning_generative_models_with_restrictions,
+    author={Adam Jermyn},
+    title={Conditioning Generative Models with Restrictions},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/adiszfnFgPEnRsGSr/conditioning-generative-models-with-restrictions},
+}
+
+@misc{strategy_for_conditioning,
+    author={James Lucassen and Evan Hubinger},
+    title={Strategy For Conditioning Generative Models},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/HAz7apopTzozrqW2k/strategy-for-conditioning-generative-models},
+}
+
+@misc{conditioning_generative_models,
+    author={Adam Jermyn},
+    title={Conditioning Generative Models},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/nXeLPcT9uhfG3TMPS/conditioning-generative-models},
+}
+
+@misc{factored_cognition,
+    title={Factored Cognition},
+    url={https://www.alignmentforum.org/posts/HAz7apopTzozrqW2k/strategy-for-conditioning-generative-models},
+}
+
+@misc{training_goals_llms,
+    author={Johannes Treutlein},
+    title={Training goals for large language models},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models},
+}
+
+
+@misc{proper_scoring_rules_dont_guarantee,
+    author={Johannes Treutlein and Rubi J. Hudson and Caspar Oesterheld},
+    title={Proper scoring rules don't guarantee predicting fixed points},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points},
+}
+
+@misc{underspecification_of_oracle_ai,
+    author={Rubi J. Hudson and Adam Jermyn and Johannes Treutlein},
+    title={Underspecification of Oracle AI},
+    year=2023,
+    url={https://www.alignmentforum.org/posts/aBRS3x4sPSJ9G6xkj/underspecification-of-oracle-ai},
+}
+
+
+@article{armstrong_good_2017,
+	title = {Good and safe uses of {AI} {Oracles}},
+	url = {https://arxiv.org/abs/1711.05541v5},
+	abstract = {It is possible that powerful and potentially dangerous artificial intelligence (AI) might be developed in the future. An Oracle is a design which aims to restrain the impact of a potentially dangerous AI by restricting the agent to no actions besides answering questions. Unfortunately, most Oracles will be motivated to gain more control over the world by manipulating users through the content of their answers, and Oracles of potentially high intelligence might be very successful at this {\textbackslash}citep\{DBLP:journals/corr/AlfonsecaCACAR16\}. In this paper we present two designs for Oracles which, even under pessimistic assumptions, will not manipulate their users into releasing them and yet will still be incentivised to provide their users with helpful answers. The first design is the counterfactual Oracle -- which choses its answer as if it expected nobody to ever read it. The second design is the low-bandwidth Oracle -- which is limited by the quantity of information it can transmit.},
+	language = {en},
+	urldate = {2023-01-31},
+	author = {Armstrong, Stuart and O'Rorke, Xavier},
+	month = nov,
+	year = {2017},
+}
+
+@misc{acausal_trade,
+    title={Acausal Trade},
+    url={https://www.lesswrong.com/tag/acausal-trade},
+}
+
+
+@incollection{weirich_causal_2020,
+	edition = {Winter 2020},
+	title = {Causal {Decision} {Theory}},
+	url = {https://plato.stanford.edu/archives/win2020/entries/decision-causal/},
+	abstract = {Causal decision theory adopts principles of rational choice thatattend to an act’s consequences. It maintains that an account ofrational choice must use causality to identify the considerations thatmake a choice rational., Given a set of options constituting a decision problem, decisiontheory recommends an option that maximizes utility, that is, an optionwhose utility equals or exceeds the utility of every other option. Itevaluates an option’s utility by calculating the option’sexpected utility. It uses probabilities and utilities of anoption’s possible outcomes to define an option’s expectedutility. The probabilities depend on the option. Causal decisiontheory takes the dependence to be causal rather than merelyevidential., This essay explains causal decision theory, reviews its history,describes current research in causal decision theory, and surveys thetheory’s philosophical foundations. The literature on causaldecision theory is vast, and this essay covers only a portion ofit.},
+	urldate = {2023-01-31},
+	booktitle = {The {Stanford} {Encyclopedia} of {Philosophy}},
+	publisher = {Metaphysics Research Lab, Stanford University},
+	author = {Weirich, Paul},
+	editor = {Zalta, Edward N.},
+	year = {2020},
+}
+
+@misc{lcdt,
+    author={Adam Shimi and Evan Hubinger},
+    title={LCDT, A Myopic Decision Theory},
+    year=2021,
+    url={https://www.alignmentforum.org/posts/Y76durQHrfqwgwM5o/lcdt-a-myopic-decision-theory},
+}
+
+@misc{intuitive_solomonoff_induction,
+    author={Alex Altair},
+    title={An Intuitive Explanation of Solomonoff Induction},
+    year=2012,
+    url={https://www.lesswrong.com/posts/Kyc5dFDzBg4WccrbK/an-intuitive-explanation-of-solomonoff-induction},
+}
+
+@misc{paul_christiano_current_work,
+    author={Paul Christiano},
+    title={Current work in AI alignment},
+    year=2020,
+    note={EA Global},
+    url={https://forum.effectivealtruism.org/posts/63stBTw3WAW6k45dY/paul-christiano-current-work-in-ai-alignment
+},}
+
+
+@techreport{bai_training_2022,
+	title = {Training a {Helpful} and {Harmless} {Assistant} with {Reinforcement} {Learning} from {Human} {Feedback}},
+	url = {http://arxiv.org/abs/2204.05862},
+	abstract = {We apply preference modeling and reinforcement learning from human feedback (RLHF) to ﬁnetune language models to act as helpful and harmless assistants. We ﬁnd this alignment training improves performance on almost all NLP evaluations, and is fully compatible with training for specialized skills such as python coding and summarization. We explore an iterated online mode of training, where preference models and RL policies are updated on a weekly cadence with fresh human feedback data, efﬁciently improving our datasets and models. Finally, we investigate the robustness of RLHF training, and identify a roughly linear relation between the RL reward and the square root of the KL divergence between the policy and its initialization. Alongside our main results, we perform peripheral analyses on calibration, competing objectives, and the use of OOD detection, compare our models with human writers, and provide samples from our models using prompts appearing in recent related work.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Bai, Yuntao and Jones, Andy and Ndousse, Kamal and Askell, Amanda and Chen, Anna and DasSarma, Nova and Drain, Dawn and Fort, Stanislav and Ganguli, Deep and Henighan, Tom and Joseph, Nicholas and Kadavath, Saurav and Kernion, Jackson and Conerly, Tom and El-Showk, Sheer and Elhage, Nelson and Hatfield-Dodds, Zac and Hernandez, Danny and Hume, Tristan and Johnston, Scott and Kravec, Shauna and Lovitt, Liane and Nanda, Neel and Olsson, Catherine and Amodei, Dario and Brown, Tom and Clark, Jack and McCandlish, Sam and Olah, Chris and Mann, Ben and Kaplan, Jared},
+	month = apr,
+	year = {2022},
+	}
+
+
+@misc{conditioning_prompts_fine_tuning,
+    author={Adam Jermyn},
+    title={Conditioning, Prompts, and Fine-Tuning},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/chevXfQmRYrTZnj8r/conditioning-prompts-and-fine-tuning
+},
+}
+
+
+@techreport{zou_forecasting_2022,
+	title = {Forecasting {Future} {World} {Events} with {Neural} {Networks}},
+	url = {http://arxiv.org/abs/2206.15474},
+	abstract = {Forecasting future world events is a challenging but valuable task. Forecasts of climate, geopolitical conﬂict, pandemics and economic indicators help shape policy and decision making. In these domains, the judgment of expert humans contributes to the best forecasts. Given advances in language modeling, can these forecasts be automated? To this end, we introduce Autocast, a dataset containing thousands of forecasting questions and an accompanying news corpus. Questions are taken from forecasting tournaments, ensuring high quality, real-world importance, and diversity. The news corpus is organized by date, allowing us to precisely simulate the conditions under which humans made past forecasts (avoiding leakage from the future). Motivated by the difﬁculty of forecasting numbers across orders of magnitude (e.g. global cases of COVID-19 in 2022), we also curate IntervalQA, a dataset of numerical questions and metrics for calibration. We test language models on our forecasting task and ﬁnd that performance is far below a human expert baseline. However, performance improves with increased model size and incorporation of relevant information from the news corpus. In sum, Autocast poses a novel challenge for large language models and improved performance could bring large practical beneﬁts.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Zou, Andy and Xiao, Tristan and Jia, Ryan and Kwon, Joe and Mazeika, Mantas and Li, Richard and Song, Dawn and Steinhardt, Jacob and Evans, Owain and Hendrycks, Dan},
+	month = oct,
+	year = {2022},
+}
+
+
+@techreport{kojima_large_2023,
+	title = {Large {Language} {Models} are {Zero}-{Shot} {Reasoners}},
+	url = {http://arxiv.org/abs/2205.11916},
+	abstract = {Pretrained large language models (LLMs) are widely used in many sub-ﬁelds of natural language processing (NLP) and generally known as excellent few-shot learners with task-speciﬁc exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-bystep answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difﬁcult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs’ ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding “Let’s think step by step” before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, signiﬁcantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shufﬂed Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large-scale InstructGPT model (text-davinci002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting ﬁnetuning datasets or few-shot exemplars.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
+	month = jan,
+	year = {2023},
+}
+
+@misc{why_ai_alignment_hard,
+    author={Ajeya Cotra},
+    title={Why AI alignment could be hard with modern deep learning},
+    year=2021,
+    url={https://www.cold-takes.com/why-ai-alignment-could-be-hard-with-modern-deep-learning/
+},
+}
+
+@misc{path_dependence_ml_inductive_biases,
+    author={Vivek Hebbar and Evan Hubinger},
+    title={Path dependence in ML inductive biases},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/bxkWd6WdkPqGmdHEk/path-dependence-in-ml-inductive-biases
+},
+}
+
+@misc{tiling_agents_self_modifying_ai,
+    author={Yudkowsky, Eliezer and Herreshoff, Marcello},
+    title={Tiling Agents for Self-Modifying AI, and the Löbian Obstacle},
+    year=2013,
+    url={http://intelligence.org/files/TilingAgentsDraft.pdf
+},
+}
+
+@misc{attempts_at_forwarding_speed_priors,
+    author={James Lucassen and Evan Hubinger},
+    title={Attempts at Forwarding Speed Priors},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/bzkCWEHG2tprB3eq2/attempts-at-forwarding-speed-priors
+},
+}
+
+@misc{agents_over_cartesian_world_models,
+    author={Mark Xu and Evan Hubinger},
+    title={Agents Over Cartesian World Models},
+    year=2021,
+    url={https://www.alignmentforum.org/posts/LBNjeGaJZw7QdybMw/agents-over-cartesian-world-models
+},
+}
+
+@misc{a_transparency_and_interpretability_tech_tree,
+    author={Evan Hubinger},
+    title={A transparency and interpretability tech tree},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/nbq2bWLcYmSGup9aF/a-transparency-and-interpretability-tech-tree
+},
+}
+
+@misc{model_index_for_researchers,
+    author={OpenAI},
+    url={https://platform.openai.com/docs/model-index-for-researchers
+},
+}
+
+
+@techreport{gao_scaling_2022,
+	title = {Scaling {Laws} for {Reward} {Model} {Overoptimization}},
+	url = {http://arxiv.org/abs/2210.10760},
+	abstract = {In reinforcement learning from human feedback, it is common to optimize against a reward model trained to predict human preferences. Because the reward model is an imperfect proxy, optimizing its value too much can hinder ground truth performance, in accordance with Goodhart’s law. This effect has been frequently observed, but not carefully measured due to the expense of collecting human preference data. In this work, we use a synthetic setup in which a ﬁxed “goldstandard” reward model plays the role of humans, providing labels used to train a proxy reward model. We study how the gold reward model score changes as we optimize against the proxy reward model using either reinforcement learning or best-of-n sampling. We ﬁnd that this relationship follows a different functional form depending on the method of optimization, and that in both cases its coefﬁcients scale smoothly with the number of reward model parameters. We also study the effect on this relationship of the size of the reward model dataset, the number of reward model and policy parameters, and the coefﬁcient of the KL penalty added to the reward in the reinforcement learning setup. We explore the implications of these empirical results for theoretical considerations in AI alignment.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Gao, Leo and Schulman, John and Hilton, Jacob},
+	month = oct,
+	year = {2022},
+}
+
+@misc{mysteries_of_mode_collapse,
+    author={Janus},
+    title={Mysteries of mode collapse},
+    year=2022,
+    url={https://www.lesswrong.com/posts/t9svvNPNmFf5Qa3TA/mysteries-of-mode-collapse-due-to-rlhf},
+}
+
+
+@misc{cross_entropy,
+	title = {Cross entropy},
+	copyright = {Creative Commons Attribution-ShareAlike License},
+	url = {https://en.wikipedia.org/w/index.php?title=Cross_entropy},
+	language = {en},
+	urldate = {2023-01-31},
+	journal = {Wikipedia},
+	month = jan,
+	year = {2023},
+}
+
+
+@misc{kl_divergence,
+	title = {Kullback-{Leibler} divergence},
+	copyright = {Creative Commons Attribution-ShareAlike License},
+	url = {https://en.wikipedia.org/w/index.php?title=Kullback%E2%80%93Leibler_divergence},
+	urldate = {2023-01-31},
+	journal = {Wikipedia},
+	month = jan,
+	year = {2023},
+}
+
+
+@techreport{chen_decision_2021,
+	title = {Decision {Transformer}: {Reinforcement} {Learning} via {Sequence} {Modeling}},
+	shorttitle = {Decision {Transformer}},
+	url = {http://arxiv.org/abs/2106.01345},
+	abstract = {We introduce a framework that abstracts Reinforcement Learning (RL) as a sequence modeling problem. This allows us to draw upon the simplicity and scalability of the Transformer architecture, and associated advances in language modeling such as GPT-x and BERT. In particular, we present Decision Transformer, an architecture that casts the problem of RL as conditional sequence modeling. Unlike prior approaches to RL that ﬁt value functions or compute policy gradients, Decision Transformer simply outputs the optimal actions by leveraging a causally masked Transformer. By conditioning an autoregressive model on the desired return (reward), past states, and actions, our Decision Transformer model can generate future actions that achieve the desired return. Despite its simplicity, Decision Transformer matches or exceeds the performance of state-of-the-art model-free ofﬂine RL baselines on Atari, OpenAI Gym, and Key-to-Door tasks.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Chen, Lili and Lu, Kevin and Rajeswaran, Aravind and Lee, Kimin and Grover, Aditya and Laskin, Michael and Abbeel, Pieter and Srinivas, Aravind and Mordatch, Igor},
+	month = jun,
+	year = {2021},
+}
+
+
+@inproceedings{taylor_quantilizers_2016,
+	title = {Quantilizers: {A} {Safer} {Alternative} to {Maximizers} for {Limited} {Optimization}},
+	shorttitle = {Quantilizers},
+	url = {https://intelligence.org/files/QuantilizersSaferAlternative.pdf},
+	abstract = {In the field of AI, expected utility maximizers are commonly used as a model for idealized agents. However, expected utility maximization can lead to unintended solutions when the utility function does not quantify everything the operators care about: imagine, for example, an expected utility maximizer tasked with winning money on the stock market, which has no regard for whether it accidentally causes a market crash. Once AI systems become sufficiently intelligent and powerful, these unintended solutions could become quite dangerous. In this paper, we describe an alternative to expected utility maximization for powerful AI systems, which we call expected utility quantilization. This could allow the construction of AI systems that do not necessarily fall into strange and unanticipated shortcuts and edge cases in pursuit of their goals.},
+	author = {Taylor, Jessica},
+	month = mar,
+	year = {2016},
+}
+
+@misc{homogeneity_vs_heterogeneity,
+    author={Evan Hubinger},
+    title={Homogeneity vs. heterogeneity in AI takeoff scenarios},
+    year=2020,
+    url={https://www.alignmentforum.org/posts/mKBfa8v4S9pNKSyKK/homogeneity-vs-heterogeneity-in-ai-takeoff-scenarios},
+}
+
+@misc{monitoring_for_deceptive_alignment,
+    author={Evan Hubinger},
+    title={Monitoring for deceptive alignment},
+    year=2022,
+    url={https://www.lesswrong.com/posts/Km9sHjHTsBdbgwKyi/monitoring-for-deceptive-alignment
+},
+}
+
+@misc{minimal_viable_product,
+    author={Jan Leike},
+    title={A minimal viable product for alignment},
+    year=2022,
+    url={www.alignmentforum.org/posts/fYf9JAwa6BYMt8GBj/link-a-minimal-viable-product-for-alignment
+},
+}
+
+
+@techreport{perez_discovering_2022,
+	title = {Discovering Language Model Behaviors with Model-Written Evaluations},
+	url = {http://arxiv.org/abs/2212.09251},
+	abstract = {As language models (LMs) scale, they develop many novel behaviors, good and bad, exacerbating the need to evaluate how they behave. Prior work creates evaluations with crowdwork (which is time-consuming and expensive) or existing data sources (which are not always available). Here, we automatically generate evaluations with LMs. We explore approaches with varying amounts of human effort, from instructing LMs to write yes/no questions to making complex Winogender schemas with multiple stages of LM-based generation and ﬁltering. Crowdworkers rate the examples as highly relevant and agree with 90-100\% of labels, sometimes more so than corresponding human-written datasets. We generate 154 datasets and discover new cases of inverse scaling where LMs get worse with size. Larger LMs repeat back a dialog user’s preferred answer (“sycophancy”) and express greater desire to pursue concerning goals like resource acquisition and goal preservation. We also ﬁnd some of the ﬁrst examples of inverse scaling in RL from Human Feedback (RLHF), where more RLHF makes LMs worse. For example, RLHF makes LMs express stronger political views (on gun rights and immigration) and a greater desire to avoid shut down. Overall, LM-written evaluations are highquality and let us quickly discover many novel LM behaviors.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Perez, Ethan and Ringer, Sam and Lukošiūtė, Kamilė and Nguyen, Karina and Chen, Edwin and Heiner, Scott and Pettit, Craig and Olsson, Catherine and Kundu, Sandipan and Kadavath, Saurav and Jones, Andy and Chen, Anna and Mann, Ben and Israel, Brian and Seethor, Bryan and McKinnon, Cameron and Olah, Christopher and Yan, Da and Amodei, Daniela and Amodei, Dario and Drain, Dawn and Li, Dustin and Tran-Johnson, Eli and Khundadze, Guro and Kernion, Jackson and Landis, James and Kerr, Jamie and Mueller, Jared and Hyun, Jeeyoon and Landau, Joshua and Ndousse, Kamal and Goldberg, Landon and Lovitt, Liane and Lucas, Martin and Sellitto, Michael and Zhang, Miranda and Kingsland, Neerav and Elhage, Nelson and Joseph, Nicholas and Mercado, Noemí and DasSarma, Nova and Rausch, Oliver and Larson, Robin and McCandlish, Sam and Johnston, Scott and Kravec, Shauna and Showk, Sheer El and Lanham, Tamera and Telleen-Lawton, Timothy and Brown, Tom and Henighan, Tom and Hume, Tristan and Bai, Yuntao and Hatfield-Dodds, Zac and Clark, Jack and Bowman, Samuel R. and Askell, Amanda and Grosse, Roger and Hernandez, Danny and Ganguli, Deep and Hubinger, Evan and Schiefer, Nicholas and Kaplan, Jared},
+	month = dec,
+	year = {2022},
+}
+
+
+@article{nakkiran_distributional_2021,
+	title = {Distributional {Generalization}: {A} {New} {Kind} of {Generalization}},
+	shorttitle = {Distributional {Generalization}},
+	url = {https://arxiv.org/abs/2009.08092},
+	language = {en},
+	urldate = {2023-01-31},
+	author = {Nakkiran, Preetum and Bansal, Yamini},
+	month = mar,
+	year = {2021},
+}
+
+
+@inproceedings{lester_power_2021,
+	address = {Online and Punta Cana, Dominican Republic},
+	title = {The {Power} of {Scale} for {Parameter}-{Efficient} {Prompt} {Tuning}},
+	url = {https://aclanthology.org/2021.emnlp-main.243},
+	doi = {10.18653/v1/2021.emnlp-main.243},
+	language = {en},
+	urldate = {2023-01-31},
+	booktitle = {Proceedings of the 2021 {Conference} on {Empirical} {Methods} in {Natural} {Language} {Processing}},
+	publisher = {Association for Computational Linguistics},
+	author = {Lester, Brian and Al-Rfou, Rami and Constant, Noah},
+	year = {2021},
+	pages = {3045--3059},
+}
+
+
+@techreport{wu_promptchainer_2022,
+	title = {{PromptChainer}: {Chaining} {Large} {Language} {Model} {Prompts} through {Visual} {Programming}},
+	shorttitle = {{PromptChainer}},
+	url = {http://arxiv.org/abs/2203.06566},
+	abstract = {While LLMs have made it possible to rapidly prototype new ML functionalities, many real-world applications involve complex tasks that cannot be easily handled via a single run of an LLM. Recent work has found that chaining multiple LLM runs together (with the output of one step being the input to the next) can help users accomplish these more complex tasks, and in a way that is perceived to be more transparent and controllable. However, it remains unknown what users need when authoring their own LLM chains – a key step to lowering the barriers for non-AI-experts to prototype AI-infused applications. In this work, we explore the LLM chain authoring process. We find from pilot studies that users need support transforming data between steps of a chain, as well as debugging the chain at multiple granularities. To address these needs, we designed PromptChainer, an interactive interface for visually programming chains. Through case studies with four designers and developers, we show that PromptChainer supports building prototypes for a range of applications, and conclude with open questions on scaling chains to even more complex tasks, as well as supporting low-fi chain prototyping.},
+	language = {en},
+	urldate = {2023-01-31},
+	institution = {arXiv},
+	author = {Wu, Tongshuang and Jiang, Ellen and Donsbach, Aaron and Gray, Jeff and Molina, Alejandra and Terry, Michael and Cai, Carrie J.},
+	month = mar,
+	year = {2022},
+}
+
+@misc{you_can_fetch_coffee,
+    author={David A. Dalrymple},
+    title={You can still fetch the coffee today if you're dead tomorrow
+},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/dzDKDRJPQ3kGqfER9/you-can-still-fetch-the-coffee-today-if-you-re-dead-tomorrow
+},
+}
+
+@misc{counterfactual_oracles,
+    author={Wei Dai},
+    title={Counterfactual Oracles = online supervised learning with random selection of training episodes
+},
+    year=2019,
+    url={https://www.alignmentforum.org/posts/yAiqLmLFxvyANSfs2/counterfactual-oracles-online-supervised-learning-with
+},
+}
+
+@misc{smoke_without_fire,
+    author={Adam Jermyn},
+    title={Smoke without fire is scary
+},
+    year=2022,
+    url={https://www.alignmentforum.org/posts/PP2Lrpvhd3bBvR8Aj/smoke-without-fire-is-scary
+},
+}
+
+@misc{wbe_lw,
+title={Whole brain emulation},
+url = {https://www.lesswrong.com/tag/whole-brain-emulation},
+journal={LessWrong},
 }
