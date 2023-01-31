@@ -1,5 +1,3 @@
 TODO:
-- Fix the rest of the internal links. This will involve \label{}ing some subsubsections.
-- Clean up bibliography. Some entries are sloppy due to poor choices by zotero.
-- Quick scroll through, look for "eye snags".
-- fix \author{} stuff
+
+- better `modelquote` env?
