@@ -3,7 +3,7 @@
 % arara: pdflatex
 % arara: pdflatex
 \documentclass[
-  onecolumn,
+  twocolumn,
   natbib,
 ]{miri-tech-article}
 \usepackage[
@@ -92,11 +92,11 @@
 \title{Conditioning Predictive Models: Risks and Strategies}
 
 \author{
-Evan Hubinger\thanks{Anthropic; some research conducted while at Machine Intelligence Research Institute},
-Adam Jermyn\thanks{TODO},
-Johannes Treutlein\footnotemark[2],
-Jeremy Rubinoff\footnotemark[2],
-Kate Woolverton\footnotemark[2]
+Evan Hubinger\thanks{Anthropic; research started while at Machine Intelligence Research Institute},
+Adam Jermyn\thanks{Anthropic; research started while working independently},
+Johannes Treutlein\thanks{TODO},
+Rubi Hudson\thanks{University of Toronto},
+Kate Woolverton\thanks{Google; research conducted independently}
 \thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.}}
 
 \date{Jan 19, 2023}
@@ -118,13 +118,13 @@ Kate Woolverton\footnotemark[2]
     As a result, we think that conditioning approaches for predictive models represent the safest known way of eliciting human-level and slightly superhuman capabilities from large language models and other similar future models.
 \end{abstract}
 
-\tableofcontents
+% \tableofcontents
 
 
 
 \section{Large language models as predictors}
 \label{sec:1}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Suppose you have a very advanced, powerful large language model (LLM) generated via self-supervised pre-training. It's clearly capable of solving complex tasks when prompted or fine-tuned in the right way---it can write code as well as a human, produce human-level summaries, write news articles, etc.---but we don't know what it is actually doing internally that produces those capabilities. It could be that your language model is:
 
@@ -153,13 +153,13 @@ In the rest of this section, we'll elaborate on what we mean by a ``predictive m
 
 
 \subsection{Eliciting Latent Knowledge's prediction model}\label{subsec:elk_prediction_model}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In ``Eliciting Latent Knowledge\cite{elk}'' (ELK), Christiano et al. start with the assumption that we can ``train a model to predict what the future will look like according to cameras and other sensors.'' They then point out that such a predictor only tells you what your cameras will show: if your cameras can be tampered with, this doesn't necessarily tell you everything you might want to know about the state of the world.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{V6aklBz.png}
+  \includegraphics[width=0.5\textwidth]{V6aklBz.png}
   \caption{Above is the example given in the ELK report: if your predictor is only predicting what the camera shows, then you can't distinguish between a situation where the model predicts a thief will steal the diamond and put a screen in front of the camera and a situation where it predicts the diamond will just stay in the vault.}
 \end{figure}
 
@@ -173,7 +173,7 @@ Conceptually, we'll think of a predictive model as a sort of Bayes net\cite{wiki
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{OTzdgch.png}
+  \includegraphics[width=0.5\textwidth]{OTzdgch.png}
   \caption{Our model of the ELK predictor. It has a bunch of internal states corresponding to aspects of the world, but its model of the camera only looks at some of those states such that only a subset influence the actual predicted observation. For example, the wall that the camera is mounted on is never observed.}
 \end{figure}
 
@@ -183,13 +183,13 @@ Additionally, such a model should also be able to accept as input camera observa
 
 
 \subsection{Pre-trained LLMs as predictive models}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Though it might not look like it at first, language model pre-training is essentially the same as training a prediction model on a particular set of cameras. Rather than predict literal cameras, however, the ``camera'' that a language model is tasked with predicting is the data collection procedure used to produce its pre-training data. A camera is just an operation that maps from the world to some data distribution---for a language model, that operation is the one that goes from the world, with all its complexity, to the data that gets collected on the internet, to how that data is scraped and filtered, all the way down to how it ends up tokenized in the model's training corpus.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{Mj4z48A.png}
+  \includegraphics[width=0.5\textwidth]{Mj4z48A.png}
   \caption{Our model of a pre-trained language model as a predictor. Such a model has to have hidden states corresponding to aspects of the world, be able to model how the world influences the internet, and then model how the internet is scraped to produce the final observation distribution that it predicts.}
 \end{figure}
 
@@ -227,7 +227,7 @@ Importantly, even though the dynamics of the world are causal, information we co
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{FHhZzMg.png}
+  \includegraphics[width=0.5\textwidth]{FHhZzMg.png}
   \caption{Our model of conditioning in language models. Observation conditionals lead to the model doing back inference to infer what states of the world would be most likely to produce that observation. Notably, the inference can only pass back through things that are directly observable by the model's ``cameras.''}
 \end{figure}
 
@@ -239,7 +239,7 @@ It is worth pointing out that there are many kinds of conditionals that we expec
 
 
 \subsection{Using predictive models in practice}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 It is worth noting that the picture described above---of a model capable of conditioning on arbitrary observations and making accurate predictions about the world given them---is quite a sophisticated one. In our opinion, however, the sophistication here is just a question of the accuracy of the predictions: simply having some model of the world that can be updated on observations to produce predictions is a very straightforward thing to do. In fact, we think that current large language models are plausibly well-described as such predictive models.
 
@@ -260,7 +260,7 @@ In the case of sequential reasoning techniques such as chain of thought promptin
 
 
 \subsection{The basic training story}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 ``How do we become confident in the safety of a machine learning system?\cite{how_become_confident}'' proposes the use of \textit{training stories} as a way of describing an overall approach to building safe, advanced AI systems. A training story is composed of two components: the \textit{training goal}---what, mechanistically, we want our model to be doing---and the \textit{training rationale}---how and why we think that our training process will produce a model doing the thing we want it to be doing. We'll be thinking of the approach of conditioning predictive models as relying on the following training story.
 
@@ -275,7 +275,7 @@ Furthermore, in Section \ref{sec:3}, we'll discuss why we think that this traini
 
 \section{Outer alignment via careful conditioning}
 \label{sec:2}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Suppose we actually get a predictive model of the world that we can condition on arbitrary observations. What should we do with it?
 
@@ -317,7 +317,7 @@ It's worth pointing out, however, that doing alignment research is just an examp
 
 \subsection{Should we predict the present or the future?}
 \label{sec:2a}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 As we discussed previously, if we could get generalization to the future---e.g. by conditioning on something like ``what will be on the Alignment Forum in 2050''---it could be a very powerful thing to do with predictive models. In such a situation, the model has to infer a plausible world trajectory leading to this observation and, for example, show us what it thinks alignment researchers are most likely to have written by then. Thus, we could use predictive models to let us pull forward insights from the future, which could be a promising way to accelerate alignment progress.
 
@@ -349,7 +349,7 @@ Overall, we are generally agnostic with respect to whether predicting counterfac
 
 \subsection{Some minor challenges}
 \label{sec:2b}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 To start with, we'll look at some likely non-fatal potential issues that might arise if you try to ask a powerful predictive model to predict something impressive and useful like alignment research---that is, though they may pose a problem in practice, we think it's unlikely that they could lead to an existential risk.
 
@@ -451,7 +451,7 @@ This problem could be alleviated if we use conditionals that are plausible in th
 
 \subsection{Major challenge: Predicting other AI systems}
 \label{sec:2c}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 This transcript is from the GPT-3 model `text-davinci-002` at zero temperature.\footnote{Note that, though we were able to replicate these zero temperature samples when we tried again the same day, when we went back to replicate them again later, we got different outputs even at zero temperature, suggesting that something must have changed about `text-davinci-002` in the interim.} The prompt is in bold:
 
@@ -595,7 +595,7 @@ While this might seem highly uncompetitive, it seems quite likely that we will h
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{UARylfz.png}
+  \includegraphics[width=0.5\textwidth]{UARylfz.png}
   \caption{Our picture of the capability elicitation frontier---as model capabilities improve, elicitation methods need to improve with them if we want to always be able to elicit all the capabilities that our models possess.}
 \end{figure}
 
@@ -605,7 +605,7 @@ Thus, actually trying to solve alignment via asking for ``A full solution to the
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{n3TBfx6.png}
+  \includegraphics[width=0.5\textwidth]{n3TBfx6.png}
   \caption{A diagram of the sort of regions that the capability elicitation frontier might pass through. Initially, any elicitation mechanism is safe because the model doesn't have any dangerous capabilities to be elicited. Initially, as the model develops potentially dangerous capabilities, careful conditioning may work to elicit them safely. Eventually, however, careful conditioning fails and we enter a regime where there is no known safe elicitation mechanism.}
 \end{figure}
 
@@ -614,7 +614,7 @@ Essentially, what all of the techniques we've discussed above are doing is helpi
 
 \subsection{Major challenge: Self-fulfilling prophecies}
 \label{sec:2d}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 It is likely that the world predicted by the model contains humans querying predictive models---after all, we plan on using such a technique in the future. Moreover, the model's training data likely contains instances of data that have been influenced by predictive models.
 
@@ -657,7 +657,7 @@ Overall, we're generally pessimistic about conditioning on ignoring the model's 
 
 \subsubsection{Potential solution: Predict the past}
 
-A related approach is to only predict times that are strictly in the predictor's past. Ideally, only predicting the past should prevent the model's predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction.
+A related approach is to only predict times that are strictly in the predictor's past. Ideally, only predicting the past should prevent the model's predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction.  It is worth pointing out that, for this to work, the model needs to know that it is in fact not itself in the past, since otherwise it might (incorrectly) believe that its predictions could influence the past.\footnote{Interestingly, this is different than the case where we predict a counterfactual (e.g. one without other AIs), since in that case it should work regardless of whether the model truly believes it is in the counterfactual or not.}
 
 As we discussed previously (section \ref{subsubsec:predict_the_past}), there are two general approaches to getting a model to predict the past:
 
@@ -687,7 +687,7 @@ Due to the complexity of consequence-blindness, it is unclear whether it would n
 
 \subsection{Major challenge: Anthropic capture}
 \label{sec:2e}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Another area of concern involves anthropic reasoning. Here our concern is that the predictor might believe that the training data were generated by a simulation. This could result in undesirable predictions such as ``and then the world is suddenly altered by the agents who run the simulation.'' In particular, this allows future potentially malign AIs running simulations to cause our AI to output essentially arbitrary predictions by changing the parameters of the simulation.
 
@@ -727,7 +727,7 @@ Overall, we think this is a problem that's unlikely to be addressable via any of
 
 \section{The case for competitiveness}
 \label{sec:3}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In addition to ensuring that we can condition predictive models safely, for such an approach to work as a way to actually reduce AI existential risk, we also need it to be the case that it is competitive---that is, that it doesn't impose too much of an alignment tax\cite{paul_christiano_current_work}. Following ``How do we become confident in the safety of a machine learning system?\cite{how_become_confident}'' we'll distinguish between two different aspects of competitiveness here that we'll need to address:
 
@@ -740,7 +740,7 @@ To make these concepts easier to keep track of absent the full training stories 
 
 
 \subsection{Implementation competitiveness}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 The most generally capable models today, large language models, seem to be well-described as predictive models. That may change, but we think it is also at least quite plausible that the first human-level AGI will be some sort of predictive model, likely similar in structure to current LLMs.
 
@@ -771,7 +771,7 @@ That being said, our hope is that transparency tools are not necessary for inner
 
 
 \subsection{Performance competitiveness}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In order to ensure performance competitiveness, we have to ensure that our approach is able to accomplish all of the tasks that would otherwise be able to be accomplished via other means of training and deploying powerful AI systems. However, if we operate under the assumption that LLMs are likely to be the first powerful AI systems, then all we need to do is ensure that anything anyone else can do with an LLM we can do via careful conditioning as well: that is, we need to ensure that we aren't imposing any restrictions on what one can do with an LLM that affect capabilities too much.
 
@@ -837,7 +837,7 @@ There are some potential solutions to this problem, though we think it is overal
 
 \section{Making inner alignment as easy as possible}
 \label{sec:4}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 At the beginning, we posited the assumption that large language models could be well-understood as predictive models of the world. At the time, however, that was just an assumption---now, we want to return to that assumption and try to understand how likely it is to actually be true.
 
@@ -847,7 +847,7 @@ Though we think that ensuring these desiderata could be quite difficult, we neve
 
 
 \subsection{Plausible internal structures}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 There are many possible ways large language models could work internally. Previously, we suggested some examples---specifically:
 
@@ -957,7 +957,7 @@ Notably, however, all such non-deceptive predictive models require hardcoding so
 
 
 \subsection{Analyzing the case for deceptive alignment}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In ``How likely is deceptive alignment?\cite{how_likely_deception}'', two scenarios are presented for how a model could become deceptively aligned: the high path-dependence scenario and the low path-dependence scenario. In the high path-dependence case, models first develop proxy goals. Then, when their understanding of the training objective exceeds the alignment of their proxy goals, it becomes favorable for the model to become deceptive. In the low path-dependence case, deception is favored by a general simplicity bias because it allows for substituting simpler long-term goals for the prediction goal and still getting good performance.
 
@@ -1016,7 +1016,7 @@ Moreover, there are plausible spot-checks we could perform anyway. For instance,
 
 
 \subsection{The RLHF conditioning hypothesis}\label{sec:rlhf_conditioning_hypothesis}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 As we will discuss later  (section \ref{subsec:RL_fine_tuning}), reinforcement-learning-based fine-tuning approaches---particularly reinforcement learning from human feedback (RLHF)---provide a potentially very flexible way to condition models\cite{conditioning_prompts_fine_tuning}.
 
@@ -1038,7 +1038,7 @@ Finally, it's worth pointing out that if the RLHF conditioning hypothesis is fal
 
 
 \subsection{Dealing with internal cognitive resource management}\label{subsec:dealing_with_internal_cognitive}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In addition to avoiding deceptive alignment and ensuring we get the right sort of ``camera'' model, there are a couple of other additional inner alignment concerns related to the difficulties of internal cognitive resource management that are also worth addressing here as well.
 
@@ -1051,7 +1051,7 @@ There are a couple of potential ways to address these sorts of tiling/forwarding
 Second, another potential inner alignment concern here is ensuring that a model efficiently managing its own internal cognitive resources doesn't start to conclude that the rest of the world also counts as an ``internal cognitive resource.'' In that case, such a model might just start optimizing the entire world to help it make predictions. To be confident that something like this won't happen, we likely need to be confident that our model will respect the correct Cartesian boundary between itself and the rest of the world, as discussed in ``Agents Over Cartesian World Models\cite{agents_over_cartesian_world_models}.'' As discussed in that post, while it is certainly possible to have agents with the correct Cartesian boundary, behaviorally distinguishing agents with the right Cartesian boundary from those with the wrong Cartesian boundary seems very difficult, at least without fooling the model in some way regarding its own situation. As a result, the hope here primarily has to rest on either the correct sorts of boundaries actually being more natural, or transparency and interpretability being able to ensure we get the right sort of boundary.
 
 \subsection{Transparency and interpretability}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Overall, we think that LLM inner alignment should be substantially easier than for other kinds of models, though still not trivial. While we think it's plausible that training predictive models simply won't lead to deceptive alignment, having some way to at least verify that---e.g. via transparency and interpretability---would give us much more confidence.
 
@@ -1067,11 +1067,11 @@ Even beyond that, in the limit of the most powerful tools (along the lines of so
 
 \section{Interactions with other approaches}
 \label{sec:5}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 
 \subsection{Imitation learning}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 One very related approach is imitation learning: rather than try to predict humans, as we are proposing, one could simply train to imitate them instead. Such an approach would have many of the same safety benefits, since it would also be exclusively trying to produce outputs from safe humans.
 
@@ -1081,7 +1081,7 @@ Thus, we think that predictive modeling at least has the potential to be just as
 
 
 \subsection{Supervised fine-tuning}\label{subsec:supervised_fine_tuning}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 For some conditionals we might have a very precise notion of what we want the model to observe (e.g. ``exactly this image coming from this camera''). Ideally, this sort of a conditional should be straightforwardly implementable via prompting, just by fixing the relevant tokens in the model's context window.\footnote{Something more sophisticated, such as performing inference over longer trajectories, may be necessary if the relevant conditionals do not fit in the context window. This technical detail does not change the basic story though.} However, at least for current models, prompting has some basic structural limitations---for example, if you want to condition on something very long, context window length could start to become quite problematic. In that sort of a case, it might be quite helpful to instead turn to supervised fine-tuning, fine-tuning on the observation to condition on rather than including it in a prompt. Effectively, this sort of fine-tuning lets you give the model substantially more bits of evidence for it to condition on than is possible via just prompting.
 
@@ -1093,7 +1093,7 @@ Such fine-tuning could also be particularly problematic if the data is specifica
 
 
 \subsection{RL fine-tuning}\label{subsec:RL_fine_tuning}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Reinforcement-learning-based fine-tuning approaches---particularly reinforcement learning from human feedback (RLHF)---provide a potentially very flexible way to condition models\cite{conditioning_prompts_fine_tuning}. In particular, we often want to employ indirect conditionals---e.g. ``We observe some sequence satisfying the following conditions: ...''---rather than the more direct conditionals we can get via prompting---e.g. ``We observe the following sequence: ...''. Such indirect conditionals are exactly the sort of thing that RL fine-tuning approaches might be able to provide for us, since we can use the reward to define an acceptance condition and then fine-tune the model to produce output that satisfies that condition.
 
@@ -1142,7 +1142,7 @@ We don't think it's particularly necessary for safety research effort to go into
 
 
 \subsection{Decision transformers}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 An alternative to standard RL fine-tuning is to train a decision transformer\cite{chen_decision_2021}, a model that predicts what reward it will get before producing the output that has that reward, thus allowing high reward trajectories to be sampled via conditioning on a high reward output. Decision transformers can be trained via supervised learning rather than explicit RL updates, which might make them less problematic---but as we discussed previously (section \ref{subsec:supervised_fine_tuning}), even if we're doing supervised fine-tuning, if it's not continuous with pre-training there's no particular reason to believe that doing so preserves the safety properties of the pre-trained model.
 
@@ -1151,7 +1151,7 @@ However, there is another reason to like decision transformers as well, which is
 That being said, additional control over the level of capabilities that we're asking for can also be a double-edged sword, as decision transformers can also make it easier to accidentally ask for far more capabilities than are available to be elicited if they are conditioned on rewards much higher than they have ever seen before---as a result, decision transformers more dangerous than normal RL fine-tuning in the hands of an uncareful user.
 
 \subsection{Imitative amplification}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 As we discussed when we were considering factorization strategies (section \ref{subsubsec:potential_solution_factor_the_problem}), any sort of factored cognition approach---such as imitative amplification (\cite{11_proposals}, section 2)---is very tricky to do with a predictive model, as such approaches necessarily rely on training the model on its own outputs. There are at least two major issues: it increases the probability that the model will predict AIs rather than humans (section \ref{sec:2c}), and it specifically increases the probability the model will predict itself, leading to multiple fixed points and the possibility of self-fulfilling prophecies (section \ref{sec:2d}).
 
@@ -1167,7 +1167,7 @@ Second, having models early on in the amplification training procedure predictin
 
 \section{Deployment strategy}
 \label{sec:6}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Previously, we have been focusing on how to make conditioning predictive models as safe and competitive as possible. Now, we want to take a step back and discuss considerations for using conditioning predictive models to address AI existential risk and what sorts of difficulties we might run into doing so in practice.
 
@@ -1177,7 +1177,7 @@ As a result, by the time predictive models can be used to predict a full solutio
 
 
 \subsection{Dealing with other, less careful actors}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 As we mentioned previously, using a predictive model to generate alignment research is only one possible use case---one that we restricted our attention to on the basis that we thought it contained the difficult aspects of using a predictive model safely. Restricting our attention to these sorts of particular conditionals---and figuring out how to do them safely---is fine if we have control over the ways in which our model will be used. If we don't have that control, however---e.g. we are in a world where people are using predictive models in all sorts of different ways---then we have to consider what might happen when our predictive model is used in a much less careful way than described here and figure out how to either deal with or prevent that from happening.
 
@@ -1193,7 +1193,7 @@ This is a pretty tall list of asks, and in our opinion making this sort of deplo
 
 
 \subsection{Possible pivotal acts with predictive models}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 The first, perhaps most obvious thing one could do with a predictive model to substantially decrease overall AI existential risk---i.e. perform a ``pivotal act''---is to significantly advance AI safety, e.g. by directly producing AI safety research. Since this is the example we've primarily been using throughout this text, we won't go into much more detail on what that might look like here.
 
@@ -1209,7 +1209,7 @@ Fourth, predictive models also have many commercial applications, so using them 
 
 
 \subsection{Continuous deployment}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Though we just talked about a ``pivotal act'' as being some sort of a discrete action, we think that this is not a very accurate model of deployment. Rather, we think that more realistic scenarios will likely look far more continuous, where at each stage as we get better and better predictive models we continuously ratchet up our ability to use them for all of the different sorts of goals listed above.\footnote{We could even get a warning shot\cite{monitoring_for_deceptive_alignment} of an early predictive model's poor attempts to mimic a deceptive superintelligence. We could even try to induce something like that on purpose, though that is of course a very risky thing to try. In particular, for that to work, it would need to be the case that the model becomes capable of imitating a deceptive AI before it becomes capable of imitating it at high enough fidelity to be actively dangerous---or if the predictive model imitates the deceptive AI well enough to effectively hide the deception until it becomes dangerous.}
 
@@ -1223,7 +1223,7 @@ We are excited about the strategy of continuously doing the best we can to use t
 
 
 \subsection{Using a predictive model to execute a pivotal plan}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 In ``Strategy For Conditioning Generative Models'' (\cite{strategy_for_conditioning}, ``Taking Advantage of New Tradeoffs'') Lucassen et al. discuss how we might be able to use powerful predictive models to generate plans for reducing AI existential risk that we can then implement---and the various risks that arise when attempting to do so. In the Lucassen et al. model, there are three sources of risk arising from any predictive model deployment strategy:
 
@@ -1243,7 +1243,7 @@ Second, as Lucassen et al. point out, the victory condition is different for pre
 
 
 \subsection{Misuse risk}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Even if predictive models are used safely and conditioned to avoid predicting worlds with malign superintelligences, predictive models still pose a danger. Malicious actors could use predictive models for a discontinuous jump in technology, for example by getting access to weapon designs from worlds where the outbreak of global war prevented AGI development. This would be particularly appealing to nations who could then use the outputs for military purposes, possibly justified by the idea of preventing others from doing so. Terrorist groups could similarly use predictive models to simulate worlds where AGI was not developed due to e.g. a pandemic and then build that virus in reality.
 
@@ -1251,7 +1251,7 @@ The incentive for state actors and terrorists to access predictive models reinfo
 
 
 \subsection{Unknown unknowns}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 When thinking about strategies for building advanced AI systems, we think it's important to consider not just how likely they are to fail, but also how well we understand the potential failure modes.
 
@@ -1265,7 +1265,7 @@ On this spectrum, we think predictive models are comparatively easier to reason 
 
 \section{Open problems}
 \label{sec:7}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 We think that there are a wide variety of ways---both experimental and theoretical---in which our analysis could be expanded upon. Here, we'll try to briefly lay out some of the future directions that we are most excited about---though note that this is only a sampling of some possible future directions, and is thus a highly incomplete list:
 
@@ -1415,7 +1415,7 @@ We are eager to see more progress in these directions, and are keen to engage wi
 
 \section{Conclusion}
 \label{sec:8}
-\cftchapterprecistoc{TODO: toc section description}
+% \cftchapterprecistoc{toc section description}
 
 Overall, when thinking about what future pre-trained large language models will do, we think that not only will it often make sense to think of them as predictive models of the world, but that if they are well-described as predictive models of the world, aligning them via careful conditioning might be quite achievable. As we have noted extensively, however, there are many caveats to this position.
 

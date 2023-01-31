@@ -539,7 +539,10 @@ Overall, we’re generally pessimistic about conditioning on ignoring the model�
 
 ### Potential solution: Predict the past
 
-A related approach is to only predict times that are strictly in the predictor’s past. Ideally, only predicting the past should prevent the model’s predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction.
+A related approach is to only predict times that are strictly in the predictor’s past. Ideally, only predicting the past should prevent the model’s predictions from influencing the world it is predicting. If the model believes it is predicting a point in the past, it knows that any predictions have no causal effect on their own outcome, making the model blind to any causal consequences of the prediction. It is worth pointing out that, for this to work, the model needs to know that it is in fact not itself in the past, since otherwise it might (incorrectly) believe that its predictions could influence the past.[^200]
+
+[^200]:
+     Interestingly, this is different than the case where we predict a counterfactual (e.g. one without other AIs), since in that case it should work regardless of whether the model truly believes it is in the counterfactual or not.
 
 As we discussed [previously](https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#Potential_solution__Predict_the_past), there are two general approaches to getting a model to predict the past:
 
