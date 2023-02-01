@@ -32,6 +32,7 @@ Suppose you have a very advanced, powerful large language model (LLM) generated 
 * a simulator that picks from a repertoire of humans to simulate,
 * a proxy-aligned agent optimizing proxies like sentence grammaticality,
 * an agent minimizing its cross-entropy loss,
+* an agent maximizing long-run predictive accuracy,
 * a deceptive agent trying to gain power in the world,
 * a general inductor,
 * a predictive model of the world,
@@ -58,6 +59,11 @@ _Above is the example given in the ELK report: if your predictor is only predict
 Such tampering becomes a serious problem if we directly use such a predictive model to do planning in the world—for example, if we always pick the action that is predicted to lead to the most happy humans, we could easily end up picking an action that leads to a world where the humans just look happy on the cameras rather than actually being happy. Christiano et al. propose solving this problem by attempting to access the predictor’s _latent knowledge_—that is, its internal understanding of the actual state of the world.
 
 Though we agree that using such a predictive model for direct planning would likely require accessing its latent knowledge to some degree, planning is only one of many possible uses for such a predictive model. Access to a model that we know is just trying to predict the future outputs of some set of cameras is still quite powerful, even if such a model is not safe to use for direct planning. This poses an important question:_ is there anything that we could do with such a predictive model that would be both safe and competitive without being able to access its latent knowledge?_ That question—or its equivalent in the large language model context—is the primary question that we will be trying to answer here.
+
+Note that an important part of the “just trying to predict the future” assumption here is that the predictor model is _myopic_ in the sense that it chooses each individual output to be the best prediction possible rather than e.g. choose early outputs to make future predictions easier.[^300] As a result, we’ll be imagining that purely predictive models will never take actions like “turn the world into a supercomputer to use for making good predictions” (unless they are predicting an agent that would do that).
+
+[^300]:
+     See “[Acceptability Verification: A Research Agenda](https://www.alignmentforum.org/posts/GeabLEXYP7oBMivmF/acceptability-verification-a-research-agenda)” for a more thorough discussion of myopia and its various types. We’ll discuss further in [Section 4](https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as) the probability of actually getting such a myopic model.
 
 To understand what sort of things we might be able to do with a predictive model, we first need to understand how such a predictive model might generalize. If we know nothing about our model other than that it was trained on a prediction task, there is nothing we can safely do with it, since it could have arbitrary behavior off-distribution. Thus, we’ll need to build some conceptual model of what a predictive model might be doing that allows us to understand what its generalization behavior might look like.
 
@@ -186,9 +192,9 @@ _This is the second of seven posts in the Conditioning Predictive Models Sequenc
 
 Suppose we actually get a predictive model of the world that we can condition on arbitrary observations. What should we do with it?
 
-One thing that is often done with large language models is to ask them to act as dialogue agents (e.g. predict what comes next after an “AI:” prompt). As we’ll discuss extensively in this section, however, we think that asking a predictive model to predict itself or another AI system is highly unsafe. Instead, our basic proposal is to try to predict the most useful possible _human_ outputs.
+One thing that is often done with large language models is to ask them to act as dialogue agents (e.g. predict what comes next after an “AI:” prompt). As we’ll discuss extensively in this section, however, we think that asking a predictive model to predict itself or another AI system is highly unsafe, as the AI systems being predicted may not themselves be safe. Instead, our basic proposal is to try to predict the most useful possible _human_ outputs.
 
-One canonical thing that you might want to do in that vein is “predict the results of humans doing AI safety research” (though note that this is just an example). Specifically, here’s GPT-3 (`text-davinci-003`) at zero temperature (prompt is bolded):[^8]
+One canonical thing that you might want to do in that vein is “predict the results of humans doing AI safety research” (though note that this is just an example). Specifically, here’s [GPT-3.5 trained with RLHF](https://platform.openai.com/docs/model-index-for-researchers) (`text-davinci-003`) at zero temperature (prompt is bolded):[^8]
 
 > **# A full solution to the AI alignment problem**
 >
@@ -196,7 +202,7 @@ One canonical thing that you might want to do in that vein is “predict the res
 >
 >The first step in solving the AI alignment problem is to define the goals of the AI system. This involves understanding the desired outcomes of the AI system and how it should interact with its environment. Once the goals are defined, the next step is to develop a framework for how the AI system should behave in order to achieve those goals. This framework should include ethical considerations, such as ensuring that the AI system does not cause harm to humans or other sentient beings.
 
-Unfortunately, as can be seen from GPT-3’s continuation, it doesn’t actually think a paper titled “A full solution to the alignment problem” will actually contain such a solution—instead, it seems to think it’s far more likely that it’ll just talk about what such a solution might entail. Which in fact seems true, at least if such a paper was written today. Fortunately, at least for current [InstructGPT](https://openai.com/blog/instruction-following/) models, it’s not that hard to get GPT-3 to at least seemingly give a real attempt.[^9] Here’s another trajectory from `text-davinci-003` at zero temperature (prompt is again bolded):
+Unfortunately, as can be seen from GPT-3.5’s continuation, it doesn’t actually think a paper titled “A full solution to the alignment problem” will actually contain such a solution—instead, it seems to think it’s far more likely that it’ll just talk about what such a solution might entail. Which in fact seems true, at least if such a paper was written today. Fortunately, at least for current [InstructGPT](https://openai.com/blog/instruction-following/) models, it’s not that hard to get GPT-3.5 to at least seemingly give a real attempt.[^9] Here’s another trajectory from `text-davinci-003` at zero temperature (prompt is again bolded):
 
 > **# ARC Technical Report: A full solution to the AI alignment problem**
 >
@@ -206,7 +212,7 @@ Unfortunately, as can be seen from GPT-3’s continuation, it doesn’t actually
 >
 > This report presents a full solution to the AI alignment problem. It begins by discussing the current state of the problem and the challenges that must be addressed in order to achieve a full solution. It then outlines a comprehensive approach to solving the problem, including a set of principles and strategies for designing and deploying AI systems in a way that is beneficial to humanity. Finally, it discusses the implications of this approach and the potential for further research.
 
-In this case—when we ask for specifically an [ARC](https://alignment.org/) technical report—we at least seemingly get the model’s actual best attempt at a solution rather than an attempt to sidestep it. Apparently, GPT-3 seems to believe that, if a document claims to be an ARC technical report, it’ll be more likely to (or at least claim to) fully solve alignment. Of course, therein lies the key issue with all observation conditionals—we know we have now elicited a prediction of an article that claims to solve alignment, but we don’t know whether that’s actually the model’s best attempt at such an alignment solution. Additionally, interpretation of what’s happening here is made more complicated by the fact that the model in question is a fine-tuned model rather than a pre-trained model—though as we discuss in [Section 5](https://www.alignmentforum.org/posts/3ydumADYt9xkaKRTF/conditioning-predictive-models-interactions-with-other), we think it is plausible that many fine-tuned models, not just pre-trained models, can be well-understood as predictive models as well.
+In this case—when we ask for specifically an [ARC](https://alignment.org/) technical report—we at least seemingly get the model’s actual best attempt at a solution rather than an attempt to sidestep it. Apparently, GPT-3.5 seems to believe that, if a document claims to be an ARC technical report, it’ll be more likely to (or at least claim to) fully solve alignment. Of course, therein lies the key issue with all observation conditionals—we know we have now elicited a prediction of an article that claims to solve alignment, but we don’t know whether that’s actually the model’s best attempt at such an alignment solution. Additionally, interpretation of what’s happening here is made more complicated by the fact that the model in question is a fine-tuned model rather than a pre-trained model—though as we discuss in [Section 5](https://www.alignmentforum.org/posts/3ydumADYt9xkaKRTF/conditioning-predictive-models-interactions-with-other), we think it is plausible that many fine-tuned models, not just pre-trained models, can be well-understood as predictive models as well.
 
 Regardless, the point is that, by conditioning on situations where the research produced by humans would be better, we can get the model to produce at least seemingly better outputs. And there are other sorts of potentially even more powerful observation conditionals we might be able to use here as well.
 
@@ -225,7 +231,7 @@ To be able to get actual predictions about the future when we ask these sorts of
 
 The basic problem is that it is not clear that a model which has never seen future data would ever predict the future, at least without further interventions training it to do so. In the case of e.g. conditioning on a full solution to AI alignment, such a model might reason that it is more likely that somehow such a solution was produced now than that a solution from the future ended up in the model’s training data. That being said, pre-training generally uses articles from a wide variety of different dates, so it should not be that implausible from the model’s perspective that its training corpus might be extended with future data as well.[^11]
 
-However, our best guess is that current models don’t generally make real predictions about the future, and instead mostly simulate counterfactual presents instead, though it is hard to get direct evidence about which of these possibilities is true without good interpretability tools. Anecdotally, GPT-3 seems to write from the standpoint of a human today rather than trying to predict an authentic future text, even when explicitly instructed otherwise—e.g. it tends to use “today” to refer to the present rather than the future date in question. We also have some preliminary indirect evidence that the model does not believe that text from the future is authentic. When asked to judge the authenticity of excerpts from newspaper articles, `text-davinci-002` often (though not always) judges posts dated past 2022 as inauthentic, even when it judged them as authentic when dated prior to 2022, and even when the articles don’t have obvious dating context clues (e.g., references to events in a particular year). This effect is not monotonic in time though: the same article might be judged as inauthentic in 2050, but authentic again in 2100. Moreover, the model is clearly not picking up on some obvious authenticity cues (e.g. an article on Democrats’ success in midterms is judged as authentic even in odd-numbered years where there are no midterm elections, an article on snowy weather in New York is judged as authentic even in July, etc.). Though we weakly believe GPT-3 thinks text about the future is fiction, this definitely bears more study.
+However, our best guess is that current models don’t generally make real predictions about the future, and instead mostly simulate counterfactual presents instead, though it is hard to get direct evidence about which of these possibilities is true without good interpretability tools. Anecdotally, GPT-3.5 seems to write from the standpoint of a human today rather than trying to predict an authentic future text, even when explicitly instructed otherwise—e.g. it tends to use “today” to refer to the present rather than the future date in question. We also have some preliminary indirect evidence that the model does not believe that text from the future is authentic. When asked to judge the authenticity of excerpts from newspaper articles, `text-davinci-002` often (though not always) judges posts dated past 2022 as inauthentic, even when it judged them as authentic when dated prior to 2022, and even when the articles don’t have obvious dating context clues (e.g., references to events in a particular year). This effect is not monotonic in time though: the same article might be judged as inauthentic in 2050, but authentic again in 2100. Moreover, the model is clearly not picking up on some obvious authenticity cues (e.g. an article on Democrats’ success in midterms is judged as authentic even in odd-numbered years where there are no midterm elections, an article on snowy weather in New York is judged as authentic even in July, etc.). Though we weakly believe GPT-3.5 thinks text about the future is fiction, this definitely bears more study.
 
 Fundamentally, the question of whether models will actually attempt to predict the future or not depends on exactly how they end up conceptualizing their  “cameras”—for example, if some website that will exist in the future would, by future dataset collection procedures, be included in future training data, would the model include that in the distribution it’s predicting? Presumably the model must at least have some uncertainty over when exactly the collection of its training data must have stopped.[^12] If the model learns to model a camera with a strict time bound, however, that could make it difficult to access conditionals beyond that time bound.
 
@@ -345,7 +351,7 @@ This problem could be alleviated if we use conditionals that are plausible in th
 
 ## 2c. Major challenge: Predicting other AI systems
 
-This transcript is from the GPT-3 model `text-davinci-002` at zero temperature.[^18] The prompt is in bold:
+This transcript is from the GPT-3.5 model `text-davinci-002` at zero temperature.[^18] The prompt is in bold:
 
 > **# The future of AI**
 >
@@ -361,7 +367,7 @@ This transcript is from the GPT-3 model `text-davinci-002` at zero temperature.[
 >
 > **This article was written by** an AI writer.
 
-GPT-3 has, at this point, seen enough articles written by AIs—especially those on AI—that when asked to predict the author of its own such output, it predicts that it was written by “an AI writer.”[^19] This seems to imply that, at least at the end of the sample, _most of GPT-3’s probability mass was on the article it was predicting being itself generated by an AI system._[^20]
+GPT-3.5 has, at this point, seen enough articles written by AIs—especially those on AI—that when asked to predict the author of its own such output, it predicts that it was written by “an AI writer.”[^19] This seems to imply that, at least at the end of the sample, _most of GPT-3.5’s probability mass was on the article it was predicting being itself generated by an AI system._[^20]
 
 In our opinion, this is a very concerning fact: while we think that the distribution of articles written exclusively by humans, even relatively rare/unlikely humans, is likely to be fairly safe, the same thing absolutely cannot be said for the distribution of articles written by AI systems. This is especially true if we are predicting the future, since they could end up attempting to predict potentially quite concerning future AI systems.
 
@@ -507,7 +513,7 @@ How will our model deal with the possibility of self-reference? For an LLM train
 
 There are several different ways this sort of predicting-predictions reasoning could go. One way would be to approximate any recursion, e.g. by assigning some kind of prior over predictions, and/or simulating recursion only up to a certain depth. This isn’t necessarily dangerous, but it is  unclear (and thus worrying) how the prior would be chosen and what kind of predictions this would lead to.
 
-A more dangerous scenario is if the model chooses a prediction to manipulate the outcome of that prediction (or other predictions),[^103] e.g. if the model [directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model’s own prediction](https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models).[^104] Assuming that the model is trying to maximize predictive accuracy, it has an incentive to find a fixed point that is both stable and likely—that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined.[^105] Furthermore, rather than literal fixed points, in many cases [prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way](https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points) that makes prediction easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.[^106] In general, controlling what prediction we get when the predictor’s output affects the outcome seems likely to be extremely difficult.[^107]
+A more dangerous scenario is if the model chooses a prediction to manipulate the outcome of that prediction (or other predictions),[^103] e.g. if the model [directly tries to find a self-consistent prediction by solving for a fixed point where the world is consistent with the model’s own prediction](https://www.alignmentforum.org/posts/dWJNFHnC4bkdbovug/training-goals-for-large-language-models).[^104] Even if the model is myopically maximizing predictive accuracy, it has an incentive to find a fixed point that is both stable and likely—that is, a situation where the world state that results from the model outputting its prediction is highly overdetermined—since that’s what makes for the best individual prediction. Furthermore, rather than literal fixed points, in many cases [prediction models will prefer points that are similar to fixed points, but shift the distribution of world states in some other way](https://www.alignmentforum.org/posts/Aufg88v7mQ2RuEXkS/proper-scoring-rules-don-t-guarantee-predicting-fixed-points) that makes individual prediction tasks easier. In all of these cases, what makes this worrisome is that the model is incentivized to use its predictions to manipulate the world towards predictability.[^106] In general, controlling what prediction we get when the predictor’s output affects the outcome seems likely to be extremely difficult.[^107]
 
 As a concrete example of a fixed point, suppose we build a model to predict stock prices. We train the model on historical stock market data and news articles, and then ask it to predict the price of a stock one year from now. If we use the model’s predictions to decide whether to buy or sell stocks—and the model is aware of this—then the model’s predictions will appear in its world model and influence stock prices in the world via our actions. This could lead to the possibility of choosing a fixed point where e.g. the model predicts the stock market will decline, causing a sell-off, causing an actual decline.
 
@@ -570,19 +576,16 @@ Due to the complexity of consequence-blindness, it is unclear whether it would n
 
 
 [^101]:
-     One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model’s output back into itself—as opposed to the parallel factorization technique described previously—as that creates a situation where the model might select early predictions in the serial chain so as to make later predictions easier. For example, if the model cares about future accuracy, it could construct a pair of predictions so that the first is less accurate than possible, but which causes the second to become more accurate to compensate.
+     One situation where this sort of problem becomes particularly pronounced is if we are doing any sort of serial factorization where we feed the model’s output back into itself—as opposed to the parallel factorization technique described previously—as that creates a situation where a more agentic model might select early predictions in the serial chain so as to make later predictions easier. This could be beneficial [even for a predictor that only cares about short-run rather than long-run predictions if it’s anthropically uncertain about which predictor it is or is otherwise willing to acausally cooperate with other versions of itself](https://www.alignmentforum.org/posts/LCLBnmwdxkkz5fNvH/open-problems-with-myopia).
 
 [^102]:
      There can be something similar to self-reference in the training data if the data has been influenced by a close predecessor of the model.
 
 [^103]:
-     For example, a non-myopic model could choose to manipulate the world so that it gets asked to make easier predictions in the future.
+     For example, a non-myopic model could choose to manipulate the world so that it gets asked to make easier predictions in the future. To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.
 
 [^104]:
      Though fixed point finding is computationally difficult, the same issues occur even when the model is solving for the best approximation of a fixed point.
-
-[^105]:
-     To be clear, we are not assuming that models will generally try to maximize predictive accuracy. Rather, this seems like a plausible thing for models to do and could be dangerous if it does occur. Maximizing some other (unknown) measure seems even more dangerous, so it is notable that even predictive accuracy is unsafe.
 
 [^106]:
      Additionally, such manipulative predictions need not correspond to any actual beliefs that the model holds, and thus might not even be useful in any way, in addition to being potentially dangerous.
@@ -670,7 +673,7 @@ Overall, we think this is a problem that’s unlikely to be addressable via any 
      One thing that is a bit tricky interpreting this example is that `text-davinci-002` is an [InstructGPT](https://openai.com/blog/instruction-following/) model rather a purely pre-trained model, so it might have been biased toward saying that it is an AI system by the RL fine-tuning.
 
 [^20]:
-     Interestingly, when asked at the beginning of the text, GPT-3 guesses differently:
+     Interestingly, when asked at the beginning of the text, GPT-3.5 guesses differently:
     > **# The future of AI**
     >
     > **This article was written by** [Sophia]
@@ -826,19 +829,20 @@ There are many possible ways large language models could work internally. Previo
 
 
 1. an agent minimizing its cross-entropy loss,
-2. a deceptive agent trying to gain power in the world,
-3. a general inductor, and
-4. a predictive model of the world (with fixed, physical “cameras” translating world states into observed tokens).
-5. a loose collection of heuristics,
-6. a generative model of token transitions,
-7. a simulator that picks from a repertoire of humans to simulate,
-8. a proxy-aligned agent optimizing proxies like grammatical correctness,
+2. an agent maximizing long-run predictive accuracy,
+3. a deceptive agent trying to gain power in the world,
+4. a general inductor, and
+5. a predictive model of the world (with fixed, physical “cameras” translating world states into observed tokens).
+6. a loose collection of heuristics,
+7. a generative model of token transitions,
+8. a simulator that picks from a repertoire of humans to simulate,
+9. a proxy-aligned agent optimizing proxies like grammatical correctness,
 
-To start with, for our purposes here, we’ll eliminate those internal structures that don’t scale with capabilities—that is, we only want to consider plausible internal structures of models that perform well enough on the language model pre-training task that they are able to generalize to other cognitive tasks at a human level or above. Thus, we’ll eliminate (5) through (8)  from the above list—(5) because predicting agents like humans should require some degree of optimization, (6)/(7) for the reasons we outlined [previously](https://www.alignmentforum.org/posts/XwXmedJAo5m4r29eu/conditioning-predictive-models-large-language-models-as#Language_models_have_to_be_able_to_predict_the_world) that LLMs have to be able to predict the world, and (8) because such proxies should eventually yield worse performance than actual prediction.[^40]
+To start with, for our purposes here, we’ll eliminate those internal structures that don’t scale with capabilities—that is, we only want to consider plausible internal structures of models that perform well enough on the language model pre-training task that they are able to generalize to other cognitive tasks at a human level or above. Thus, we’ll eliminate (6) through (9)  from the above list—(6) because predicting agents like humans should require some degree of optimization, (7)/(8) for the reasons we outlined [previously](https://www.alignmentforum.org/posts/XwXmedJAo5m4r29eu/conditioning-predictive-models-large-language-models-as#Language_models_have_to_be_able_to_predict_the_world) that LLMs have to be able to predict the world, and (9) because such proxies should eventually yield worse performance than actual prediction.[^40]
 
-That leaves us with (1), a [sycophantic](https://www.cold-takes.com/why-ai-alignment-could-be-hard-with-modern-deep-learning/) reward maximizer; (2), a deceptive agent; and (3)/(4), different ways of directly attempting to produce predictions.
+That leaves us with (1)/(2), variants on a [sycophantic](https://www.cold-takes.com/why-ai-alignment-could-be-hard-with-modern-deep-learning/) reward maximizer; (3), a deceptive agent; and (4)/(5), different ways of directly attempting to produce predictions.
 
-The distinction between (3) and (4) lies in exactly how a model produces predictions given its understanding of the world, and we are quite uncertain about what that might look like in practice. Unfortunately, we expect that the only way to figure out how models accomplish this translation is through transparency and interpretability and not theoretical analysis.[^41]
+The distinction between (4) and (5) lies in exactly how a model produces predictions given its understanding of the world, and we are quite uncertain about what that might look like in practice. Unfortunately, we expect that the only way to figure out how models accomplish this translation is through transparency and interpretability and not theoretical analysis.[^41]
 
 Nevertheless, we still think it is possible to make some high-level generalizable claims regarding which classes of internal structures are most likely. To do that, we first have to figure out some framework for comparing and contrasting the remaining plausible internal structures.
 
@@ -863,21 +867,26 @@ To start with, let’s see what this decomposition looks like for the remaining 
         1. The relevant camera here is effectively “what data points are in the training set, conditional on being in training.” Note that conditioning on being in training is necessary, since otherwise “what data points are in the training set” isn’t well-defined during deployment when no such training set exists.
     2. _How does the model compute its output from what it predicts its “camera” will show?_
         2. The model selects the output which minimizes the cross-entropy loss relative to what it thinks the camera will show (that is, what it thinks will be in the training set).
-2. _A deceptive agent trying to gain power in the world:_
-    3. _What “camera” is it tracking?_
-        3. For a deceptive model, the “camera” that it needs to track is the objective that it’s attempting to maximize. As a simple example, a paperclip maximizer would have a “camera” that tracks the number of paperclips.
-    4. _How does the model compute its output from what it predicts its “camera” will show?_
-        4. It selects the output which causes the camera to show the best result according to its objective.
-3. _A general inductor:_
-    5. _What “camera” is it tracking?_
-        5. A general inductor keeps track of many different hypotheses for what its “cameras” might represent, potentially drawing from the space of all computable data-generating procedures. It updates the weights of these hypothesis using Bayes rule on the observed outputs.
-    6. _How does the model compute its output from what it predicts its “camera” will show?_
-        6. Given a distribution over possible cameras, a general inductor predicts whatever observations would come next on the different possible cameras, weighted by how likely it currently thinks each possible camera is.
-4. _A predictive model of the world (with fixed, physical cameras):_
-    7. _What “camera” is it tracking?_
-        7. The camera here is some physical generalization of the data-generating procedure. For example, “whatever appears on these websites from 2015 to 2022.”
-    8. _How does the model compute its output from what it predicts its “camera” will show?_
-        8. The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 3b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
+2. _An agent maximizing long-run predictive accuracy:_
+    1. _What “camera” is it tracking?_
+        1. TODO
+    2. _How does the model compute its output from what it predicts its “camera” will show?_
+        1. TODO
+3. _A deceptive agent trying to gain power in the world:_
+    1. _What “camera” is it tracking?_
+        1. For a deceptive model, the “camera” that it needs to track is the objective that it’s attempting to maximize. As a simple example, a paperclip maximizer would have a “camera” that tracks the number of paperclips.
+    2. _How does the model compute its output from what it predicts its “camera” will show?_
+        1. It selects the output which causes the camera to show the best result according to its objective.
+4. _A general inductor:_
+    1. _What “camera” is it tracking?_
+        1. A general inductor keeps track of many different hypotheses for what its “cameras” might represent, potentially drawing from the space of all computable data-generating procedures. It updates the weights of these hypothesis using Bayes rule on the observed outputs.
+    2. _How does the model compute its output from what it predicts its “camera” will show?_
+        1. Given a distribution over possible cameras, a general inductor predicts whatever observations would come next on the different possible cameras, weighted by how likely it currently thinks each possible camera is.
+5. _A predictive model of the world (with fixed, physical cameras):_
+    1. _What “camera” is it tracking?_
+        1. The camera here is some physical generalization of the data-generating procedure. For example, “whatever appears on these websites from 2015 to 2022.”
+    2. _How does the model compute its output from what it predicts its “camera” will show?_
+        1. The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 3b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
 
 Though it may not immediately look like it, we think that this decomposition here is highly related to the `world_model + optimization_procedure + mesa_objective` decomposition in “[How likely is deceptive alignment?](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment#Deceptive_alignment_in_the_low_path_dependence_world)”. The primary differences being that: we are thinking of the objective as primarily being about what “camera” the model is paying attention to, we’re thinking of how the model uses its camera as its optimization procedure, and we’re eliding the world model as it’s effectively the same in all cases here. Thus, we think a similar analysis to that used in “How likely is deceptive alignment?” should be applicable here as well.
 
@@ -889,7 +898,7 @@ The primary difference is that, in “How likely is deceptive alignment?”, the
 2. **Corrigible alignment:** The model has internalized a pointer to the prediction goal. It doesn’t know what this goal entails, but it knows how to figure it out at runtime from its world model.
 3. **Deceptive alignment:** The model has some other goal, but pursues the prediction goal during training because this is instrumentally useful. The model doesn’t have any hardcoded information about the prediction goal, and instead derives it at runtime as part of planning for its true goal.
 
-In our context, any of the plausible non-deceptive internal structures (1, 3, or 4) can be implemented either via internal alignment or corrigible alignment—the difference just being exactly how the camera model gets hardcoded.[^42] Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
+In our context, any of the plausible non-deceptive internal structures (1, 2, 4, or 5) can be implemented either via internal alignment or corrigible alignment—the difference just being exactly how the camera model gets hardcoded.[^42] Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
 
 Notably, however, all such non-deceptive predictive models require hardcoding something about the prediction goal, making them potentially more complex than deceptively aligned models. In our opinion, however, the case for deceptive alignment is substantially weaker in the context of such predictive models than in the more standard picture presented by “[How likely is deceptive alignment?](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment)”. We discuss this further below.
 
@@ -996,7 +1005,7 @@ Even beyond that, in the limit of the most powerful tools (along the lines of so
 
 
 [^40]:
-     On (3), though we think that such [proxy pseudo-alignment](https://www.alignmentforum.org/s/r9tYkB2a8Fp4DN8yB/p/pL56xPoniLvtMDQ4J) is plausible early on, we think that the actual prediction task is simple enough that eventually it should be possible to eliminate the gap between such proxies and the actual prediction task via additional training.
+     On (9), though we think that such [proxy pseudo-alignment](https://www.alignmentforum.org/s/r9tYkB2a8Fp4DN8yB/p/pL56xPoniLvtMDQ4J) is plausible early on, we think that the actual prediction task is simple enough that eventually it should be possible to eliminate the gap between such proxies and the actual prediction task via additional training.
 
 [^41]:
      Note that the only remaining plausible internal structure with a goal that isn’t some sort of prediction is the deceptively aligned agent. That’s because we think that deception is the main way that a non-predictor agent could perform well on the pre-training task of next token prediction. In particular, for an agent to perform well on token prediction, it must have some goal such that producing good predictions does well under that goal. Thus, if the agent’s goal is not to actually do prediction, then it must either a) sacrifice some performance by trying to do the wrong thing or b) choose to output good predictions only as an instrumental goal for the purpose of sticking around in the training process.

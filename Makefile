@@ -9,3 +9,6 @@ install:
 .PHONY: convert
 convert:
 	python md_to_tex.py
+
+.PHONY: all
+all: build convert
