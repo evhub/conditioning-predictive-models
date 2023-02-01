@@ -156,7 +156,7 @@ That being said, the disconnect between theory and practice---the difference bet
 \item chain of thought prompting\cite{TODO: cite https://arxiv.org/abs/2201.11903} (or other sequential reasoning techniques).
 \end{enumerate}
 
-We think that both of these techniques can be well-understood under the predictive modeling framework, though---especially in the case of RLHF (reinforcement learning from human feedback)---we are uncertain whether predictive modeling is the best framework. Later in Section 4\cite{TODO: cite https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as} we'll discuss in detail the question of whether RLHF fine-tuned models will be well-described as predictive.
+We think that both of these techniques can be well-understood under the predictive modeling framework, though we are uncertain whether predictive modeling is the best framework---especially in the case of RLHF (reinforcement learning from human feedback). Later in Section 4\cite{TODO: cite https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as} we'll discuss in detail the question of whether RLHF fine-tuned models will be well-described as predictive.
 
 In the case of sequential reasoning techniques such as chain of thought prompting, however, we think that the predictive modeling framework applies quite straightforwardly. Certainly---at the very least by giving models additional inference-time compute---sequential reasoning should enable models to solve tasks that they wouldn't be able to do in a single forward pass. Nevertheless, if we believe that large language models are well-described as predictive models, then trusting any sequential reasoning they perform requires believing that they're predicting one or more trustworthy reasoners. That means you have to understand what sort of reasoner the model was attempting to predict in each individual forward pass, which means you still have to do the same sort of careful conditioning that we'll discuss in Section 2\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful}. We'll discuss more of the exact details of how sequential reasoning techniques interact with predictive models\cite{TODO: cite https://www.alignmentforum.org/posts/fj8faDDQEfvN2LQcW/conditioning-predictive-models-the-case-for-competitiveness#Handling_sequential_reasoning} later as well.
 
@@ -186,7 +186,7 @@ Suppose we actually get a predictive model of the world that we can condition on
 
 One thing that is often done with large language models is to ask them to act as dialogue agents (e.g. predict what comes next after an ``AI:'' prompt). As we'll discuss extensively in this section, however, we think that asking a predictive model to predict itself or another AI system is highly unsafe, as the AI systems being predicted may not themselves be safe. Instead, our basic proposal is to try to predict the most useful possible \textit{human} outputs.
 
-One canonical thing that you might want to do in that vein is ``predict the results of humans doing AI safety research'' (though note that this is just an example). Specifically, here's GPT-3.5 trained with RLHF\cite{TODO: cite https://platform.openai.com/docs/model-index-for-researchers} (`text-davinci-003`) at zero temperature (prompt is bolded):\footnote{No cherry-picking was done for any of the samples we give here---each was our very first attempt to get the model to produce the behavior we were looking for. Though note that we did used to have an example here where we added a future date rather than adding ``ARC Technical Report,'' which we then later removed following our additional investigations into conditioning on future dates\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#2a__Should_we_predict_the_present_or_the_future_} that convinced us that the effect wasn't clearly real.}
+One canonical thing that you might want to do in that vein is ``predict the results of humans doing AI safety research'' (though note that this is just an example). Specifically, here's GPT-3.5 trained with RLHF (`text-davinci-003`)\cite{TODO: cite https://platform.openai.com/docs/model-index-for-researchers} at zero temperature (prompt is bolded):\footnote{No cherry-picking was done for any of the samples we give here---each was our very first attempt to get the model to produce the behavior we were looking for. Though note that we did used to have an example here where we added a future date rather than adding ``ARC Technical Report,'' which we then later removed following our additional investigations into conditioning on future dates\cite{TODO: cite https://www.alignmentforum.org/posts/3kkmXfvCv9DmT3kwx/conditioning-predictive-models-outer-alignment-via-careful#2a__Should_we_predict_the_present_or_the_future_} that convinced us that the effect wasn't clearly real.}
 
 > \textbf{# A full solution to the AI alignment problem}
 >
@@ -809,11 +809,11 @@ To start with, let's see what this decomposition looks like for the remaining pl
     \begin{enumerate}
     \item \textit{What ``camera'' is it tracking?}
         \begin{enumerate}
-        \item TODO
+        \item This model's camera here needs to track prompts given to the model over a long time-horizon, along with a distribution over correct continuations. What ``correct'' means could vary, however, from something closer to 1a where the model conditions on being in training, to something closer to 4a or 5a where it is predicting a more general camera.
         \end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
-        \item TODO
+        \item The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier.
         \end{enumerate}
     \end{enumerate}
 \item \textit{A deceptive agent trying to gain power in the world:}
@@ -846,7 +846,7 @@ To start with, let's see what this decomposition looks like for the remaining pl
         \end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
-        \item The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 3b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
+        \item The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 4b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
         \end{enumerate}
     \end{enumerate}
 \end{enumerate}

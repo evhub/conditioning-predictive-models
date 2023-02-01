@@ -96,7 +96,7 @@ Evan Hubinger\thanks{Anthropic; research started while at Machine Intelligence R
 Adam Jermyn,
 Johannes Treutlein\thanks{University of California, Berkeley},
 Rubi Hudson\thanks{University of Toronto},
-Kate Woolverton ~
+Kate Woolverton
 \thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.}}
 
 \date{Jan 19, 2023}
@@ -166,7 +166,7 @@ In ``Eliciting Latent Knowledge\cite{elk}'' (ELK), Christiano et al. start with 
 
 Such tampering becomes a serious problem if we directly use such a predictive model to do planning in the world---for example, if we always pick the action that is predicted to lead to the most happy humans, we could easily end up picking an action that leads to a world where the humans just look happy on the cameras rather than actually being happy. Christiano et al. propose solving this problem by attempting to access the predictor's \textit{latent knowledge}---that is, its internal understanding of the actual state of the world.
 
-Though we agree that using such a predictive model for direct planning would likely require accessing its latent knowledge to some degree, planning is only one of many possible uses for such a predictive model. Access to a model that we know is just trying to predict the future outputs of some set of cameras is still quite powerful, even if such a model is not safe to use for direct planning. This poses an important question:\textit{is there anything that we could do with such a predictive model that would be both safe and competitive without being able to access its latent knowledge?} That question---or its equivalent in the large language model context---is the primary question that we will be trying to answer here.
+Though we agree that using such a predictive model for direct planning would likely require accessing its latent knowledge to some degree, planning is only one of many possible uses for such a predictive model. Access to a model that we know is just trying to predict the future outputs of some set of cameras is still quite powerful, even if such a model is not safe to use for direct planning. This poses an important question: \textit{is there anything that we could do with such a predictive model that would be both safe and competitive without being able to access its latent knowledge?} That question---or its equivalent in the large language model context---is the primary question that we will be trying to answer here.
 
 Note that an important part of the ``just trying to predict the future'' assumption here is that the predictor model is \textit{myopic} in the sense that it chooses each individual output to be the best prediction possible rather than e.g. choose early outputs to make future predictions easier.\footnote{See ``Acceptability Verification: A Research Agenda''\cite{acceptability_verification} for a more thorough discussion of myopia and its various types. We'll discuss further in Section \ref{sec:4} the probability of actually getting such a myopic model.} As a result, we'll be imagining that purely predictive models will never take actions like ``turn the world into a supercomputer to use for making good predictions'' (unless they are predicting an agent that would do that).
 
@@ -257,7 +257,7 @@ That being said, the disconnect between theory and practice---the difference bet
 \item chain of thought prompting\cite{chain_of_thought} (or other sequential reasoning techniques).
 \end{enumerate}
 
-We think that both of these techniques can be well-understood under the predictive modeling framework, though---especially in the case of RLHF (reinforcement learning from human feedback)---we are uncertain whether predictive modeling is the best framework. Later in Section \ref{sec:4} we'll discuss in detail the question of whether RLHF fine-tuned models will be well-described as predictive.
+We think that both of these techniques can be well-understood under the predictive modeling framework, though we are uncertain whether predictive modeling is the best framework---especially in the case of RLHF (reinforcement learning from human feedback). Later in Section \ref{sec:4} we'll discuss in detail the question of whether RLHF fine-tuned models will be well-described as predictive.
 
 In the case of sequential reasoning techniques such as chain of thought prompting, however, we think that the predictive modeling framework applies quite straightforwardly. Certainly---at the very least by giving models additional inference-time compute---sequential reasoning should enable models to solve tasks that they wouldn't be able to do in a single forward pass. Nevertheless, if we believe that large language models are well-described as predictive models, then trusting any sequential reasoning they perform requires believing that they're predicting one or more trustworthy reasoners. That means you have to understand what sort of reasoner the model was attempting to predict in each individual forward pass, which means you still have to do the same sort of careful conditioning that we'll discuss in Section \ref{sec:2}. We'll discuss more of the exact details of how sequential reasoning techniques interact with predictive models (section \ref{subsubsec:handling_sequential_reasoning}) later as well.
 
@@ -912,11 +912,11 @@ To start with, let's see what this decomposition looks like for the remaining pl
     \begin{enumerate}
     \item \textit{What ``camera'' is it tracking?}
         \begin{enumerate}
-        \item TODO
+        \item This model's camera here needs to track prompts given to the model over a long time-horizon, along with a distribution over correct continuations. What “correct” means could vary, however, from something closer to 1a where the model conditions on being in training, to something closer to 4a or 5a where it is predicting a more general camera.
         \end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
-        \item TODO
+        \item The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier.
         \end{enumerate}
     \end{enumerate}
 \item \textit{A deceptive agent trying to gain power in the world:}
@@ -949,7 +949,7 @@ To start with, let's see what this decomposition looks like for the remaining pl
         \end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
-        \item The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 3b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
+        \item The model outputs whatever the most likely next observation is for its cameras to show. This is similar to 4b., but with the model only considering physical cameras rather than arbitrary data-generation processes.
         \end{enumerate}
     \end{enumerate}
 \end{enumerate}
