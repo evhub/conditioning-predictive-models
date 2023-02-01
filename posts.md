@@ -1,3 +1,5 @@
+_This is the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+
 # Conditioning Predictive Models
 
 ## Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, Kate Woolverton
