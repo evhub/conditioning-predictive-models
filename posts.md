@@ -194,7 +194,7 @@ Suppose we actually get a predictive model of the world that we can condition on
 
 One thing that is often done with large language models is to ask them to act as dialogue agents (e.g. predict what comes next after an “AI:” prompt). As we’ll discuss extensively in this section, however, we think that asking a predictive model to predict itself or another AI system is highly unsafe, as the AI systems being predicted may not themselves be safe. Instead, our basic proposal is to try to predict the most useful possible _human_ outputs.
 
-One canonical thing that you might want to do in that vein is “predict the results of humans doing AI safety research” (though note that this is just an example). Specifically, here’s [GPT-3.5 trained with RLHF](https://platform.openai.com/docs/model-index-for-researchers) (`text-davinci-003`) at zero temperature (prompt is bolded):[^8]
+One canonical thing that you might want to do in that vein is “predict the results of humans doing AI safety research” (though note that this is just an example). Specifically, here’s [GPT-3.5 trained with RLHF (`text-davinci-003`)](https://platform.openai.com/docs/model-index-for-researchers) at zero temperature (prompt is bolded):[^8]
 
 > **# A full solution to the AI alignment problem**
 >
