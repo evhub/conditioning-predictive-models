@@ -97,7 +97,7 @@ Adam Jermyn,
 Johannes Treutlein\thanks{University of California, Berkeley},
 Rubi Hudson\thanks{University of Toronto},
 Kate Woolverton
-\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Sam Marks, Nicholas Schiefer, Ethan Perez, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.}}
+\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Ethan Perez, Nicholas Schiefer, Sam Marks, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Danny Hernandez, Amanda Askell, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback}}
 
 \date{Jan 19, 2023}
 
@@ -790,6 +790,15 @@ We think that this is the primary way that the overall performance competitivene
 That being said, we think this limitation is not necessarily fatal for our overall approach: it seems very plausible that we could target LLM capabilities up to the level of any task that any group of highly-capable people could accomplish under perfect conditions over some reasonable period of time, say e.g. five years---what we described previously as the ``max human'' level. Though not arbitrarily powerful, our hope is that the capabilities in the first transformative LLMs that are available to be elicited will be below that level---and that we will be able to then use those capabilities to help us align the next set of models that are above that level.
 
 Thus, even though we can't safely elicit capabilities just via conditioning beyond the threshold of what any humans could theoretically accomplish, as long as the capabilities that we need to successfully navigate the transition from slightly superhuman/transformative LLMs to highly superhuman AGIs is under that threshold, that fact shouldn't constitute a fatal performance competitiveness issue.
+
+
+\subsubsection{Restricting ourselves to dialogue agents that claim to be humans}\label{subsubsec:restricting_ourselves_to_dialogue_agents_that_claim_to_be_humans}
+
+In addition to the capability limitations of predicting humans described above, there is another potential limitation to just doing human prediction as well: it makes it substantially harder to train AI systems that truthfully represent what they are. In particular, if you ask a predictive model predicting a helpful human assistant whether it's an AI or a human, it will claim to be a human, which is correct in the sense that claiming to be a human is what a human would do, but incorrect in the sense that the AI system is not itself a human.
+
+Though this doesn't necessarily create any capability limitations---at least beyond the general capability limitations of only being able to do tasks that humans could do---it does present a potentially thorny deployment and societal issue, since it could be quite confusing for users to interact with AIs that claim to be humans.
+
+That being said, there are multiple ways to potentially address this sort of limitation. One idea could be to simply predict humans pretending to be AIs---though this does increase the possibility of those humans knowing they're being predicted, as we discussed previously (section \ref{subsubsec:humans_discover_theyre_being}). Alternatively, another approach could be to use two models, one of which generates the original output that it predicts a human would produce, and another that performs the task of translating that output into the equivalent thing but claiming to be an AI rather than a human---both of which are tasks that humans should be plenty capable of, and thus should be doable just via predicting humans.\footnote{One potentially tricky issue with any of these approaches of training a predictive model to claim to be a human is that if it's actually not well-described as a predictive model---and is instead e.g. well-described as an agent---then we would actively be training it to lie in telling us that it's a human rather than an AI, which could result in a substantially less aligned agent than we would have gotten otherwise.}
 
 
 \subsubsection{Restricting ourselves to only using predictive models}\label{subsubsec:restricting_ourselves_to_only_using_predictive_models}

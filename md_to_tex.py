@@ -240,6 +240,7 @@ def footnote_recorder_replace(tokens):
         text_lines.append(line.strip())
     footnote_text = "\n".join(text_lines)
     assert footnote_text.strip(), f"got no text for footnote {tokens['num']!r}"
+    assert tokens["num"] not in footnote_dict, f"duplicate footnote declaration: {tokens['num']!r}"
     footnote_dict[tokens["num"]] = footnote_text
     return "\n"
 
@@ -247,10 +248,14 @@ patterns_list.append((footnote_recorder_grammar, footnote_recorder_replace))
 
 
 # footnote replacer:
+seen_footnotes = set()
+
 footnote_replacer_grammar = Literal("[^") + NUM("num") + Literal("]")
 
 @tokens_as_dict(assert_keys=("num",))
 def footnote_replacer_replace(tokens):
+    assert tokens["num"] not in seen_footnotes, f"duplicate footnote reference: {tokens['num']!r}"
+    seen_footnotes.add(tokens["num"])
     try:
         return "\\footnote{" + footnote_dict[tokens["num"]] + "}"
     except:
