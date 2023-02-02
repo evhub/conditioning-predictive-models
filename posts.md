@@ -4,9 +4,9 @@ _This is the Conditioning Predictive Models Sequence based on the forthcoming pa
 
 ## Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, Kate Woolverton
 
-_This is the first of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the first of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
-_Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Ethan Perez, Nicholas Schiefer, Sam Marks, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Danny Hernandez, Amanda Askell, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback._
+_Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Ethan Perez, Nicholas Schiefer, Sam Marks, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Abram Demski, Jared Kaplan, Beth Barnes, Danny Hernandez, Amanda Askell, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback._
 
 
 # Abstract
@@ -188,7 +188,7 @@ Furthermore, in [Section 3](https://www.alignmentforum.org/posts/fj8faDDQEfvN2LQ
      This usage of inner and outer alignment is somewhat contrary to [how the terms were originally defined](https://www.alignmentforum.org/s/r9tYkB2a8Fp4DN8yB), since we won’t be talking about mesa-optimizers here. Since the original definitions don’t really apply in the predictive models context, however, we think our usage should be relatively unambiguous. To be fully technical, the way we’ll be using inner and outer alignment most closely matches up with the concepts of _[training goal alignment](https://www.alignmentforum.org/posts/FDJnZt8Ks2djouQTZ/how-do-we-become-confident-in-the-safety-of-a-machine#Evaluating_proposals_for_building_safe_advanced_AI)_ (for outer alignment) and _[training rationale alignment](https://www.alignmentforum.org/posts/FDJnZt8Ks2djouQTZ/how-do-we-become-confident-in-the-safety-of-a-machine#Evaluating_proposals_for_building_safe_advanced_AI)_ (for inner alignment).
 
 
-_This is the second of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the second of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 2. Outer alignment via careful conditioning
 
@@ -703,7 +703,7 @@ Overall, we think this is a problem that’s unlikely to be addressable via any 
      We could also try to mitigate the risk of predicting a superintelligent AI here via ensembling—e.g. comparing the results across similar runs and taking the majority vote. By reducing the variance on whether an individual question will be predicted to be answered by a superintelligent malign AI or a human, such an approach could make it much safer to run a lot of such trajectories without inevitably worrying that one of them would have to eventually predict a superintelligent AI. In mathematical terms, if we have a collection of random variables corresponding to whether an individual run would predict a superintelligent malign AI, reducing the variance of each variable, even if it doesn’t change the mean, can increase the probability that the sum of the random variables will be below some threshold. One problem with this approach, however, is that for it to work we have to be confident that predicting a malign superintelligent AI within the ensemble isn’t itself catastrophic—which it might be if, for example, the model predicts that such a malign AI would attempt to hack the computers it’s running on.
 
 
-_This is the third of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the third of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 3. The case for competitiveness
 
@@ -825,7 +825,7 @@ There are some potential solutions to this problem, though we think it is overal
      Notably, this does also open us up to some additional inner alignment concerns related to doing the internal cognitive resource management in the right way, which we discuss [later](https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as#Dealing_with_internal_cognitive_resource_management).
 
 
-_This is the fourth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the fourth of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 4. Making inner alignment as easy as possible
 
@@ -885,7 +885,7 @@ To start with, let’s see what this decomposition looks like for the remaining 
     1. _What “camera” is it tracking?_
         1. This model’s camera here needs to track prompts given to the model over a long time-horizon, along with a distribution over correct continuations. What “correct” means could vary, however, from something closer to 1a where the model conditions on being in training, to something closer to 4a or 5a where it is predicting a more general camera.
     2. _How does the model compute its output from what it predicts its “camera” will show?_
-        1. The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier.
+        1. The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier. Such a model might even be deceptive, making this mostly a sub-class of 3.
 3. _A deceptive agent trying to gain power in the world:_
     1. _What “camera” is it tracking?_
         1. For a deceptive model, the “camera” that it needs to track is the objective that it’s attempting to maximize. As a simple example, a paperclip maximizer would have a “camera” that tracks the number of paperclips.
@@ -912,7 +912,7 @@ The primary difference is that, in “How likely is deceptive alignment?”, the
 2. **Corrigible alignment:** The model has internalized a pointer to the prediction goal. It doesn’t know what this goal entails, but it knows how to figure it out at runtime from its world model.
 3. **Deceptive alignment:** The model has some other goal, but pursues the prediction goal during training because this is instrumentally useful. The model doesn’t have any hardcoded information about the prediction goal, and instead derives it at runtime as part of planning for its true goal.
 
-In our context, any of the plausible non-deceptive internal structures (1, 2, 4, or 5) can be implemented either via internal alignment or corrigible alignment—the difference just being exactly how the camera model gets hardcoded.[^42] Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
+In our context, any of the plausible non-deceptive internal structures (1, 4, or 5) can be implemented either via internal alignment or corrigible alignment—the difference just being exactly how the camera model gets hardcoded.[^42] Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
 
 Notably, however, all such non-deceptive predictive models require hardcoding something about the prediction goal, making them potentially more complex than deceptively aligned models. In our opinion, however, the case for deceptive alignment is substantially weaker in the context of such predictive models than in the more standard picture presented by “[How likely is deceptive alignment?](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment)”. We discuss this further below.
 
@@ -1037,7 +1037,7 @@ Even beyond that, in the limit of the most powerful tools (along the lines of so
      Some ways in which situational awareness could improve performance on next token prediction include: modeling the data curation process, helping predict other AIs via the model introspecting on its own structure, the same thing for ML papers, predicting the actions of AI labs by understanding how their AIs work, the model predicting its own output if any such output shows up in training (e.g. via RLHF), etc.
 
 
-_This is the fifth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the fifth of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 5. Interactions with other approaches
 
@@ -1137,7 +1137,7 @@ Second, having models early on in the amplification training procedure predictin
      It’s also worth pointing out that Gao et al. provide another piece of evidence potentially in favor of the RLHF conditioning hypothesis, which is that model scale seems to mostly change the intercept of the fit for the amount of true reward obtained after RLHF, suggesting that scale primarily operates via improving the baseline prior. If the RLHF conditioning hypothesis holds, pre-training scale operating via improving the baseline prior is exactly what it would predict—that being said, while it’s unclear what other hypotheses regarding what RLHF is doing would have predicted here, it seems quite plausible that they would have predicted the same thing and that this doesn’t actually distinguish much between them.
 
 
-_This is the sixth of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
+_This is the sixth of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper. We will be releasing posts gradually over the course of the next week or so to give people time to read and digest them as they come out._
 
 # 6. Deployment strategy
 
@@ -1242,7 +1242,7 @@ On this spectrum, we think predictive models are comparatively easier to reason 
      Additionally, the Lucassen et al. model assumes that all future malign AIs know exactly what we’re going to condition on and can always spoof it exactly—but that’s clearly not fully true, and to the extent that it isn’t, it should work in our favor.
 
 
-_This is the final of seven posts in the Conditioning Predictive Models Sequence based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper._
+_This is the final of seven posts in the [Conditioning Predictive Models Sequence](https://www.alignmentforum.org/s/n3utvGrgC2SGi9xQX) based on the forthcoming paper “Conditioning Predictive Models: Risks and Strategies” by Evan Hubinger, Adam Jermyn, Johannes Treutlein, Rubi Hudson, and Kate Woolverton. Each post in the sequence corresponds to a different section of the paper._
 
 # 7. Open problems
 

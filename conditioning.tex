@@ -97,7 +97,7 @@ Adam Jermyn,
 Johannes Treutlein\thanks{University of California, Berkeley},
 Rubi Hudson\thanks{University of Toronto},
 Kate Woolverton
-\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Ethan Perez, Nicholas Schiefer, Sam Marks, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Jared Kaplan, Beth Barnes, Danny Hernandez, Amanda Askell, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.}}
+\thanks{Authors are listed in contribution order. Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin Shah, Ethan Perez, Nicholas Schiefer, Sam Marks, William Saunders, Evan R. Murphy, Paul Colognese, Tamera Lanham, Arun Jose, Ramana Kumar, Thomas Woodside, Abram Demski, Jared Kaplan, Beth Barnes, Danny Hernandez, Amanda Askell, Robert Krzyzanowski, and Andrei Alexandru for useful conversations, comments, and feedback.}}
 
 \date{Jan 19, 2023}
 
@@ -925,7 +925,7 @@ To start with, let's see what this decomposition looks like for the remaining pl
         \end{enumerate}
     \item \textit{How does the model compute its output from what it predicts its ``camera'' will show?}
         \begin{enumerate}
-        \item The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier.
+        \item The model chooses an overall policy over outputs that maximizes its predictive accuracy (or some actual proper scoring rule) aggregated over its horizon length. Thus, such a model might choose to output continuations with low accuracy on some time steps in order to make future predictions easier. Such a model might even be deceptive, making this mostly a sub-class of 3.
         \end{enumerate}
     \end{enumerate}
 \item \textit{A deceptive agent trying to gain power in the world:}
@@ -975,7 +975,7 @@ The primary difference is that, in ``How likely is deceptive alignment?'', the i
 \item \textbf{Deceptive alignment:} The model has some other goal, but pursues the prediction goal during training because this is instrumentally useful. The model doesn't have any hardcoded information about the prediction goal, and instead derives it at runtime as part of planning for its true goal.
 \end{enumerate}
 
-In our context, any of the plausible non-deceptive internal structures (1, 2, 4, or 5) can be implemented either via internal alignment or corrigible alignment---the difference just being exactly how the camera model gets hardcoded.\footnote{This is also true for the deceptive models---they too can have whatever long-term objective they're tracking implemented via either an internal alignment or corrigible alignment mechanism (that is, either hardcoded directly or specified via a pointer).} Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
+In our context, any of the plausible non-deceptive internal structures (1, 4, or 5) can be implemented either via internal alignment or corrigible alignment---the difference just being exactly how the camera model gets hardcoded.\footnote{This is also true for the deceptive models---they too can have whatever long-term objective they're tracking implemented via either an internal alignment or corrigible alignment mechanism (that is, either hardcoded directly or specified via a pointer).} Thus, for our purposes here, we will generally lump internally and corrigible aligned models together as non-deceptive predictive models.
 
 Notably, however, all such non-deceptive predictive models require hardcoding something about the prediction goal, making them potentially more complex than deceptively aligned models. In our opinion, however, the case for deceptive alignment is substantially weaker in the context of such predictive models than in the more standard picture presented by ``How likely is deceptive alignment?\cite{how_likely_deception}''. We discuss this further below.
 
