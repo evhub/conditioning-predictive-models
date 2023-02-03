@@ -796,7 +796,7 @@ Thus, even though we can't safely elicit capabilities just via conditioning beyo
 
 In addition to the capability limitations of predicting humans described above, there is another potential limitation to just doing human prediction as well: it makes it substantially harder to train AI systems that truthfully represent what they are. In particular, if you ask a predictive model predicting a helpful human assistant whether it's an AI or a human, it will claim to be a human, which is correct in the sense that claiming to be a human is what a human would do, but incorrect in the sense that the AI system is not itself a human.
 
-Though this doesn't necessarily create any capability limitations---at least beyond the general capability limitations of only being able to do tasks that humans could do---it does present a potentially thorny deployment and societal issue, since it could be quite confusing for users to interact with AIs that claim to be humans.
+Though this doesn't necessarily create any capability limitations---at least beyond the general capability limitations of only being able to do tasks that humans could do---it does present a potentially thorny deployment and societal issue, since it could be quite confusing for users to interact with AIs that claim to be humans. \cite{eu_ai_act}
 
 That being said, there are multiple ways to potentially address this sort of limitation. One idea could be to simply predict humans pretending to be AIs---though this does increase the possibility of those humans knowing they're being predicted, as we discussed previously (section \ref{subsubsec:humans_discover_theyre_being}). Alternatively, another approach could be to use two models, one of which generates the original output that it predicts a human would produce, and another that performs the task of translating that output into the equivalent thing but claiming to be an AI rather than a human---both of which are tasks that humans should be plenty capable of, and thus should be doable just via predicting humans.\footnote{One potentially tricky issue with any of these approaches of training a predictive model to claim to be a human is that if it's actually not well-described as a predictive model---and is instead e.g. well-described as an agent---then we would actively be training it to lie in telling us that it's a human rather than an AI, which could result in a substantially less aligned agent than we would have gotten otherwise.}
 
@@ -1113,7 +1113,7 @@ For the most part, we think this is likely to be basically fine, since it's esse
 
 One way that the fine-tuning data could be substantively different than pre-training is if it directly depends on the model itself---e.g. fine-tuning on the model's own outputs. Not only is this substantially less continuous with pre-training, but it also specifically raises the risk of the model imitating AIs and/or producing self-fulfilling prophecies.
 
-Such fine-tuning could also be particularly problematic if the data is specifically selected according to some criterion other than actual representativeness of the world---that is, if there's no clear ``camera'' that corresponds to how the data was collected. Probably the most notable way this could happen is via reinforcement learning (RL), specifically the practice of fine-tuning on trajectories selected to have high reward, e.g. as in OpenAI's FeedME approach\cite{model_index_for_researchers}. In our view, we think this is likely to be essentially the same as just doing the RL update directly---which we'll discuss next.
+Such fine-tuning could also be particularly problematic if the data is specifically selected according to some criterion other than actual representativeness of the world---that is, if there's no clear ``camera'' that corresponds to how the data was collected. Probably the most notable way this could happen is via reinforcement learning (RL), specifically the practice of fine-tuning on trajectories selected to have high reward, e.g. as in OpenAI's FeedME approach\cite{openai_model_index}. In our view, we think this is likely to be essentially the same as just doing the RL update directly---which we'll discuss next.
 
 
 \subsection{RL fine-tuning}\label{subsec:RL_fine_tuning}
@@ -1348,7 +1348,7 @@ We think that there are a wide variety of ways---both experimental and theoretic
     \end{itemize}
 \item What are the differences between supervised learning approaches and RL fine-tuning approaches?
     \begin{itemize}
-    \item Where is the dividing line, particularly with respect to markers of agentic behavior (appendix \ref{sec:appendix})? Is something like FeedME\cite{model_index_for_researchers} closer to supervised or RL?
+    \item Where is the dividing line, particularly with respect to markers of agentic behavior (appendix \ref{sec:appendix})? Is something like FeedME\cite{openai_model_index} closer to supervised or RL?
     \item Under what conditions are different fine-tuning regimes well-modeled as conditionals of the pre-trained distribution?
     \end{itemize}
 \item When do current LLMs predict other AI systems? When do they predict themselves?
