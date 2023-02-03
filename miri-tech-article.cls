@@ -70,8 +70,6 @@
 \ProcessOptions\relax
 
 \if@annote
-	\PassOptionsToPackage{annotation}{biblatex-chicago}
-	\PassOptionsToPackage{sorting=none}{biblatex-chicago}
 \fi
 
 
@@ -81,24 +79,17 @@
 \usepackage[round,sort&compress]{natbib}
 \else
   \if@numeric
-  \usepackage[backend=biber,natbib=true,style=numeric,citestyle=numeric,sorting=none]{biblatex}
   \else
     \if@numericcomp
-    \usepackage[backend=biber,natbib=true,style=numeric,citestyle=numeric-comp,sorting=none]{biblatex}
     \else
       \if@authordate
-      \usepackage[authordate,natbib,backend=biber,noibid]{biblatex-chicago}
       \else
-        \usepackage[authordate,natbib,backend=biber,noibid]{biblatex-chicago}
       \fi
     \fi
   \fi
   % fix long URLs displaying incorrectly on arXiv.org > http://tex.stackexchange.com/questions/134191/line-breaks-of-long-urls-in-bibliography :
-  \setcounter{biburllcpenalty}{7000}
-  \setcounter{biburlucpenalty}{8000}
 \fi
 
-\renewcommand{\bibfont}{\footnotesize}
 
 
 % Ensure header and footnotes are not copyable
