@@ -3,7 +3,7 @@
 % arara: pdflatex
 % arara: pdflatex
 \documentclass[
-  twocolumn,
+  onecolumn,
   natbib,
 ]{miri-tech-article}
 \usepackage[
@@ -118,7 +118,7 @@ Kate Woolverton
     As a result, we think that conditioning approaches for predictive models represent the safest known way of eliciting human-level and slightly superhuman capabilities from large language models and other similar future models.
 \end{abstract}
 
-% \tableofcontents
+\tableofcontents
 
 
 
@@ -160,7 +160,7 @@ In ``Eliciting Latent Knowledge\cite{elk}'' (ELK), Christiano et al. start with 
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{V6aklBz.png}
+  \includegraphics[width=0.9\textwidth]{V6aklBz.png}
   \caption{Above is the example given in the ELK report: if your predictor is only predicting what the camera shows, then you can't distinguish between a situation where the model predicts a thief will steal the diamond and put a screen in front of the camera and a situation where it predicts the diamond will just stay in the vault.}
 \end{figure}
 
@@ -176,7 +176,7 @@ Conceptually, we'll think of a predictive model as a sort of Bayesian network wh
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{OTzdgch.png}
+  \includegraphics[width=0.9\textwidth]{OTzdgch.png}
   \caption{Our model of the ELK predictor. It has a bunch of internal states corresponding to aspects of the world, but its model of the camera only looks at some of those states such that only a subset influence the actual predicted observation. For example, the wall that the camera is mounted on is never observed.}
 \end{figure}
 
@@ -192,7 +192,7 @@ Though it might not look like it at first, language model pre-training is essent
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{Mj4z48A.png}
+  \includegraphics[width=0.9\textwidth]{Mj4z48A.png}
   \caption{Our model of a pre-trained language model as a predictor. Such a model has to have hidden states corresponding to aspects of the world, be able to model how the world influences the internet, and then model how the internet is scraped to produce the final observation distribution that it predicts.}
 \end{figure}
 
@@ -230,7 +230,7 @@ Importantly, even though the dynamics of the world are causal, information we co
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{FHhZzMg.png}
+  \includegraphics[width=0.8\textwidth]{FHhZzMg.png}
   \caption{Our model of conditioning in language models. Observation conditionals lead to the model doing back inference to infer what states of the world would be most likely to produce that observation. Notably, the inference can only pass back through things that are directly observable by the model's ``cameras.''}
 \end{figure}
 
@@ -598,7 +598,7 @@ While this might seem highly uncompetitive, it seems quite likely that we will h
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{UARylfz.png}
+  \includegraphics[width=0.8\textwidth]{UARylfz.png}
   \caption{Our picture of the capability elicitation frontier---as model capabilities improve, elicitation methods need to improve with them if we want to always be able to elicit all the capabilities that our models possess.}
 \end{figure}
 
@@ -608,7 +608,7 @@ Thus, actually trying to solve alignment via asking for ``A full solution to the
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{n3TBfx6.png}
+  \includegraphics[width=0.8\textwidth]{n3TBfx6.png}
   \caption{A diagram of the sort of regions that the capability elicitation frontier might pass through. Initially, any elicitation mechanism is safe because the model doesn't have any dangerous capabilities to be elicited. Initially, as the model develops potentially dangerous capabilities, careful conditioning may work to elicit them safely. Eventually, however, careful conditioning fails and we enter a regime where there is no known safe elicitation mechanism.}
 \end{figure}
 
