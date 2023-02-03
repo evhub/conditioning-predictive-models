@@ -4,7 +4,7 @@
 % arara: pdflatex
 \documentclass[
   onecolumn,
-  natbib,
+  nonatbib,
 ]{miri-tech-article}
 \usepackage[
   notodo,
@@ -25,6 +25,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[hang,flushmargin]{footmisc}
 \usepackage{setspace}
+
 
 % \let\starttoc\undefined
 \newcommand{\cftchapindent}{10mm}
@@ -80,7 +81,6 @@
 \setcounter{tocdepth}{1}
 
 %\setcitestyle{numbers,square}
-\bibliographystyle{unsrtnat}
 
 \onehalfspacing
 \setlength{\parskip}{0.5em}
@@ -93,7 +93,7 @@
 
 \author{
 Evan Hubinger\thanks{Anthropic; research started while at Machine Intelligence Research Institute},
-Adam Jermyn,
+Adam S. Jermyn,
 Johannes Treutlein\thanks{University of California, Berkeley},
 Rubi Hudson\thanks{University of Toronto},
 Kate Woolverton
@@ -540,7 +540,7 @@ The problem with this approach is that it's unclear what a model would make of s
 
 As an alternative to trying to condition away AIs entirely, it should suffice for our purposes to simply condition away malign AIs. While this still leads to a situation where your predictor will predict that very advanced, superhuman outputs must have come from AIs, if those AIs are likely to be aligned, then we should be okay.
 
-For example, if we believe that some particular way of building non-predictor superhuman AI agents is better than another, we can condition on us deciding to build AIs via that better method---perhaps, for example, we condition on all the major labs pursuing imitative amplification (\citet{11_proposals}, \href{https://www.alignmentforum.org/posts/fRsjBseRuvRhMPPE5/an-overview-of-11-proposals-for-building-safe-advanced-ai#2__Imitative_amplification___intermittent_oversight}{section 2}) or \href{https://www.lesswrong.com/tag/whole-brain-emulation}{whole brain emulation}.
+For example, if we believe that some particular way of building non-predictor superhuman AI agents is better than another, we can condition on us deciding to build AIs via that better method---perhaps, for example, we condition on all the major labs pursuing imitative amplification (\cite{11_proposals}, \href{https://www.alignmentforum.org/posts/fRsjBseRuvRhMPPE5/an-overview-of-11-proposals-for-building-safe-advanced-ai#2__Imitative_amplification___intermittent_oversight}{section 2}) or \href{https://www.lesswrong.com/tag/whole-brain-emulation}{whole brain emulation}.
 
 There are a couple of problems with this approach, however. First, we still have to know what to ask for, which means we still need to have some idea of how one might safely build such a superhuman aligned AI. Second, even if we did have such an idea, why wouldn't we just build that thing directly---what benefit do we get out of building a predictor and asking the predictor to predict what would happen if we'd built the agent instead?
 
@@ -684,7 +684,7 @@ Another potential difficulty in both cases is if the model exploits acausal corr
 
 All of the above potential solutions to self-fulfilling prophecies involve attempting to get predictions from the model in cases where its predictions can't influence their own likelihood. Ideally, however, we might hope for a predictor that simply never takes into account the influence of the predictions it makes when considering the likelihood of those predictions. In ``Underspecification of Oracle AI\cite{underspecification_of_oracle_ai},'' Hudson et al. refer to this concept as \textit{consequence-blindness.}
 
-Unfortunately, consequence-blindness can be a somewhat nebulous concept. In particular, there are many ways in which a prediction can affect its own likelihood, and capturing all of them can be quite complex. A prediction can affect its own outcome through the reactions of the humans that elicited it, by having other AIs predict what prediction your AI will make, or via acausal cooperation\cite{acausal_trade} with other agents including future/past versions of itself. A prediction can also affect other predictions by changing which questions and how many questions are asked by humans. These examples are not a comprehensive list of influence channels, but rather serve to illustrate the difficulty of defining all aspects of consequence-blindness.
+Unfortunately, consequence-blindness can be a somewhat nebulous concept. In particular, there are many ways in which a prediction can affect its own likelihood, and capturing all of them can be quite complex. A prediction can affect its own outcome through the reactions of the humans that elicited it, by having other AIs predict what prediction your AI will make, or via acausal cooperation\href{https://www.lesswrong.com/tag/acausal-trade}{acausal trade} with other agents including future/past versions of itself. A prediction can also affect other predictions by changing which questions and how many questions are asked by humans. These examples are not a comprehensive list of influence channels, but rather serve to illustrate the difficulty of defining all aspects of consequence-blindness.
 
 Due to the complexity of consequence-blindness, it is unclear whether it would naturally be favored by realistic machine learning setups and if not what could be done to increase the likelihood of getting a consequence-blind predictor. One idea might be to try to get a model with a causal decision theory\cite{weirich_causal_2020}, since such a model would be blind to the acausal effects of its predictions, or a lonely causal decision theory\cite{lcdt}, since such a model would also be blind to the direct causal influence of its predictions on the behavior of other agents. Unfortunately, controlling exactly what sort of a decision theory a predictive model ends up learning seems extremely difficult---assuming that decision theory is even the right concept to describe a predictor's relationship to its predictions.
 
@@ -1551,6 +1551,7 @@ For all of the below, let $U$ be something we think the model might care about a
 \end{enumerate}
 
 
+\bibliographystyle{halpha}
 \bibliography{conditioning}
 
 \end{document}
