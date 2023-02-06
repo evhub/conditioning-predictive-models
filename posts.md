@@ -41,7 +41,7 @@ Suppose you have a very advanced, powerful large language model (LLM) generated 
 * etc.
 
 [^203]:
-     We prefer ``predictive model'' to ``generative model'' since it is more specific about what distribution is being generated from, specifically a distribution over observations of the world given some conditional.
+     We prefer “predictive model” to “generative model” since it is more specific about what distribution is being generated from, specifically a distribution over observations of the world given some conditional.
 
 [Later](https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as), we’ll discuss why you might expect to get one of these over the others, but for now, we’re going to focus on the possibility that your language model is well-understood as a **predictive model of the world.**
 
