@@ -11,7 +11,7 @@ _Thanks to Paul Christiano, Kyle McDonell, Laria Reynolds, Collin Burns, Rohin S
 
 # Abstract
 
-Our intention is to provide a definitive reference on what it would take to safely make use of predictive models in the absence of a solution to the [Eliciting Latent Knowledge](https://www.alignmentforum.org/posts/qHCDysDnvhteW7kRd/arc-s-first-technical-report-eliciting-latent-knowledge) problem.
+Our intention is to provide a definitive reference on what it would take to safely make use of generative/predictive models in the absence of a solution to the [Eliciting Latent Knowledge](https://www.alignmentforum.org/posts/qHCDysDnvhteW7kRd/arc-s-first-technical-report-eliciting-latent-knowledge) problem.
 
 Furthermore, we believe that large language models can be understood as such predictive models of the world, and that such a conceptualization raises significant opportunities for their safe yet powerful use via carefully conditioning them to predict desirable outputs.
 
@@ -37,8 +37,11 @@ Suppose you have a very advanced, powerful large language model (LLM) generated 
 * an agent maximizing long-run predictive accuracy,
 * a deceptive agent trying to gain power in the world,
 * a general inductor,
-* a predictive model of the world,
+* a generative/predictive model of the world,[^203]
 * etc.
+
+[^203]:
+     We prefer ``predictive model'' to ``generative model'' since it is more specific about what distribution is being generated from, specifically a distribution over observations of the world given some conditional.
 
 [Later](https://www.alignmentforum.org/posts/qoHwKgLFfPcEuwaba/conditioning-predictive-models-making-inner-alignment-as), we’ll discuss why you might expect to get one of these over the others, but for now, we’re going to focus on the possibility that your language model is well-understood as a **predictive model of the world.**
 
